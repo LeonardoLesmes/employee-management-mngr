@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import com.employee_management_mngr.employee.application.exceptions.ErrorPostCre
 import com.employee_management_mngr.employee.application.exceptions.InvalidEmployeeRequest;
 import com.employee_management_mngr.employee.application.orchestrator.EmployeeOrchestrator;
 import com.employee_management_mngr.employee.domain.employee.Employee;
+import com.employee_management_mngr.employee.domain.employee.EmployeeStatus;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,9 +33,23 @@ public class EmployeeController {
             .body(employeeOrchestrator.createEmployee(employee));
     }
 
+    @PostMapping("/unsafe") // This endpoint is for testing purposes only and should not be used in production
+    public ResponseEntity<Employee> createEmployeeUnsafe(@RequestBody Employee employee) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(employeeOrchestrator.createEmployee(employee));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployee(@PathVariable Integer id) {
         return ResponseEntity.ok(employeeOrchestrator.findEmployeeById(id));
+    }
+
+    @PutMapping("/{id}/status/{status}")
+    public ResponseEntity<Employee> updateEmployeeStatus(
+            @PathVariable Integer id, 
+            @PathVariable EmployeeStatus status) {
+        employeeOrchestrator.updateEmployeeStatus(id, status);
+        return ResponseEntity.noContent().build();
     }
 
     @ExceptionHandler(ErrorCreationEmployee.class)

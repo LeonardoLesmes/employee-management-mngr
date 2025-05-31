@@ -29,7 +29,7 @@ public class PostgresEmployeeRepository implements EmployeeRepository {
         Root<Employee> employee = query.from(Employee.class);
         employee.fetch("role", JoinType.LEFT);
         
-        query.where(cb.equal(employee.get("email"), email));
+        query.where(cb.equal(cb.lower(employee.get("email")), email.toLowerCase()));
         
         try {
             return Optional.of(em.createQuery(query).getSingleResult());

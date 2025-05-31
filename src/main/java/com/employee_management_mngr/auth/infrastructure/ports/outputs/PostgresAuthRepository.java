@@ -1,4 +1,4 @@
-package com.employee_management_mngr.auth.infrastructure.outputs;
+package com.employee_management_mngr.auth.infrastructure.ports.outputs;
 
 import java.util.Optional;
 

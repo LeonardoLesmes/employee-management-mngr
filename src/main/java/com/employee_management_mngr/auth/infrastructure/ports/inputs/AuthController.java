@@ -1,4 +1,4 @@
-package com.employee_management_mngr.auth.infrastructure.inputs;
+package com.employee_management_mngr.auth.infrastructure.ports.inputs;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

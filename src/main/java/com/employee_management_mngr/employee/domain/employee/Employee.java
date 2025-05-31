@@ -6,6 +6,8 @@ import com.employee_management_mngr.employee.domain.role.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,13 +34,15 @@ public class Employee {
     private String email;
 
     @Column(nullable = false)
-    private String department;    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private String department;    
     
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)    
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
-
+    
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private EmployeeStatus status;
     
     @Column(name = "assigned_by", nullable = false)
     private Integer assignedBy;

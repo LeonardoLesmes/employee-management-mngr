@@ -13,6 +13,7 @@ import com.employee_management_mngr.employee.application.exceptions.InvalidEmplo
 import com.employee_management_mngr.employee.application.exceptions.RequiredFieldMissingException;
 import com.employee_management_mngr.employee.application.ports.output.EmployeeRepository;
 import com.employee_management_mngr.employee.domain.employee.Employee;
+import com.employee_management_mngr.employee.domain.employee.EmployeeStatus;
 
 import lombok.RequiredArgsConstructor;
 
@@ -63,8 +64,7 @@ public class EmployeeService {
         if (employee.getRoleAssignedAt() == null) {
             employee.setRoleAssignedAt(LocalDateTime.now());
         }
-    }
-    
+    }    
 
     public Employee findEmployeeById(Integer id) {
         return employeeRepository.findById(id)
@@ -74,5 +74,14 @@ public class EmployeeService {
     public Employee findEmployeeByEmail(String email) {
         return employeeRepository.findByEmail(email)
             .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with email: " + email));
+    }
+
+    public Employee updateEmployeeStatus(Integer employeeId, EmployeeStatus newStatus) {
+        Employee employee = findEmployeeById(employeeId);        
+        if (newStatus == null) {
+            throw new InvalidEmployeeRequest("Status cannot be null");
+        }        
+        employee.setStatus(newStatus);
+        return employeeRepository.save(employee);
     }
 }
