@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.employee_management_mngr.access.application.ports.input.AccessRequestUseCase;
 import com.employee_management_mngr.access.application.services.AccessRequestService;
 import com.employee_management_mngr.access.domain.AccessRequest;
+import com.employee_management_mngr.access.domain.AccessRequestStatus;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,5 +30,10 @@ public class AccessRequestOrchestrator implements AccessRequestUseCase {
     @Override
     public List<AccessRequest> findByEmployeeIdAndAssignedBy(Integer employeeId, Integer assignedById) {
         return accessRequestService.findByEmployeeIdAndAssignedBy(employeeId, assignedById);
+    }
+
+    @Override
+    public AccessRequest updateAccessRequestStatus(Integer requestId, AccessRequestStatus newStatus) {
+        return accessRequestService.updateAccessRequestStatus(requestId, newStatus);
     }
 }

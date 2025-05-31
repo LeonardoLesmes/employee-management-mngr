@@ -71,4 +71,20 @@ public class AccessRequestService {
         employeeUseCase.findEmployeeById(employeeId);
         return accessRequestRepository.findByEmployeeId(employeeId);
     }
+
+    public AccessRequest updateAccessRequestStatus(Integer requestId, AccessRequestStatus newStatus) {
+        AccessRequest accessRequest = accessRequestRepository.findById(requestId)
+            .orElseThrow(() -> new AccessRequestCreationException("Access request not found with id: " + requestId));
+        
+        if (newStatus == null) {
+            throw new AccessRequestCreationException("New status cannot be null");
+        }
+        
+        accessRequest.setStatus(newStatus);
+        if (newStatus != AccessRequestStatus.PENDING) {
+            accessRequest.setResolutionDate(LocalDateTime.now());
+        }
+        
+        return accessRequestRepository.save(accessRequest);
+    }
 }

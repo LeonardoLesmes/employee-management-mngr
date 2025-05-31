@@ -1,7 +1,6 @@
 package com.employee_management_mngr.access.infrastructure.inputs;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import com.employee_management_mngr.access.application.exceptions.AccessRequestCreationException;
 import com.employee_management_mngr.access.application.ports.input.AccessRequestUseCase;
 import com.employee_management_mngr.access.domain.AccessRequest;
+import com.employee_management_mngr.access.domain.AccessRequestStatus;
 import com.employee_management_mngr.access.infrastructure.inputs.dto.AccessRequestDTO;
 import com.employee_management_mngr.access.infrastructure.inputs.dto.CreateAccessRequestDTO;
+import com.employee_management_mngr.access.infrastructure.inputs.dto.UpdateAccessRequestStatusDTO;
 import com.employee_management_mngr.system.application.exceptions.SystemNotFoundException;
 import com.employee_management_mngr.employee.application.exceptions.EmployeeNotFoundException;
 
@@ -43,6 +44,15 @@ public class AccessRequestController {
             .map(AccessRequestDTO::fromEntity)
             .toList();
         return ResponseEntity.ok(dtos);
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<AccessRequestDTO> updateAccessRequestStatus(
+        @PathVariable Integer id,
+        @RequestBody UpdateAccessRequestStatusDTO request
+    ) {
+        AccessRequest updatedRequest = accessRequestUseCase.updateAccessRequestStatus(id, request.getStatus());
+        return ResponseEntity.ok(AccessRequestDTO.fromEntity(updatedRequest));
     }
 
     @ExceptionHandler(EmployeeNotFoundException.class)
