@@ -3,7 +3,7 @@ package com.employee_management_mngr.employee.application.services;
 import org.springframework.stereotype.Service;
 
 import com.employee_management_mngr.employee.application.ports.output.ThirdPartyServicePort;
-import com.employee_management_mngr.employee.domain.Employee;
+import com.employee_management_mngr.employee.domain.employee.Employee;
 
 @Service
 public class ThirdPartyIntegrationService {

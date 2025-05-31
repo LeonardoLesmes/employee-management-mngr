@@ -3,7 +3,7 @@ package com.employee_management_mngr.employee.infrastructure.adapters.output;
 import org.springframework.stereotype.Component;
 
 import com.employee_management_mngr.employee.application.ports.output.ThirdPartyServicePort;
-import com.employee_management_mngr.employee.domain.Employee;
+import com.employee_management_mngr.employee.domain.employee.Employee;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
