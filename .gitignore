@@ -33,3 +33,8 @@ build/
 .vscode/
 
 src/main/java/com/employee_management_mngr/temp/
+
+
+# temporary files
+employees
+database.sql
