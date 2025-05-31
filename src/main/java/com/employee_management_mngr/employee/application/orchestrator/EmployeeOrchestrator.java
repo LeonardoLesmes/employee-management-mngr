@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.employee_management_mngr.employee.application.exceptions.ErrorPostCreationEmployee;
-import com.employee_management_mngr.employee.application.exceptions.InvalidEmployeeRequest;
 import com.employee_management_mngr.employee.application.ports.input.EmployeeUseCase;
 import com.employee_management_mngr.employee.application.services.EmployeeService;
 import com.employee_management_mngr.employee.application.services.ThirdPartyIntegrationService;
