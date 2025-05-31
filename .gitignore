@@ -32,4 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 
-src/main/java/com/kata/employee_management_mngr/temp/
+src/main/java/com/employee_management_mngr/temp/
