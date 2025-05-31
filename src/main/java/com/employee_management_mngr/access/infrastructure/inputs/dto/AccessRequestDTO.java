@@ -20,7 +20,6 @@ public class AccessRequestDTO {
     private LocalDateTime requestDate;
     private LocalDateTime resolutionDate;
     private Integer assignedById;
-    private String assignedByName;
 
     public static AccessRequestDTO fromEntity(AccessRequest entity) {
         AccessRequestDTO dto = new AccessRequestDTO();
@@ -33,7 +32,6 @@ public class AccessRequestDTO {
         dto.setRequestDate(entity.getRequestDate());
         dto.setResolutionDate(entity.getResolutionDate());
         dto.setAssignedById(entity.getAssignedBy().getId());
-        dto.setAssignedByName(entity.getAssignedBy().getName());
         return dto;
     }
 }

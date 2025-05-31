@@ -57,8 +57,17 @@ public class AccessRequestService {
             .toList();
     }
 
+    public List<AccessRequest> findByEmployeeIdAndAssignedBy(Integer employeeId, Integer assignedById) {
+        List<AccessRequest> requests = findByEmployeeId(employeeId);    
+        if (assignedById == null) {
+            return requests;
+        }
+        return requests.stream()
+            .filter(request -> request.getAssignedBy().getId().equals(assignedById))
+            .toList();        
+    }
+
     public List<AccessRequest> findByEmployeeId(Integer employeeId) {
-        // Verificar que el empleado existe
         employeeUseCase.findEmployeeById(employeeId);
         return accessRequestRepository.findByEmployeeId(employeeId);
     }

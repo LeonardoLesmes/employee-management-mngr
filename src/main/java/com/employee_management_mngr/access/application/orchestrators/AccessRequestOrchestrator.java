@@ -25,4 +25,9 @@ public class AccessRequestOrchestrator implements AccessRequestUseCase {
     public List<AccessRequest> findByEmployeeId(Integer employeeId) {
         return accessRequestService.findByEmployeeId(employeeId);
     }
+
+    @Override
+    public List<AccessRequest> findByEmployeeIdAndAssignedBy(Integer employeeId, Integer assignedById) {
+        return accessRequestService.findByEmployeeIdAndAssignedBy(employeeId, assignedById);
+    }
 }

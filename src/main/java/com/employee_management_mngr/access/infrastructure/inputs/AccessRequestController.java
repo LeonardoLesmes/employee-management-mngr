@@ -34,11 +34,14 @@ public class AccessRequestController {
     }
 
     @GetMapping("/employee/{employeeId}")
-    public ResponseEntity<List<AccessRequestDTO>> getAccessRequestsByEmployeeId(@PathVariable Integer employeeId) {
-        List<AccessRequest> requests = accessRequestUseCase.findByEmployeeId(employeeId);
+    public ResponseEntity<List<AccessRequestDTO>> getAccessRequestsByEmployeeId(
+        @PathVariable Integer employeeId,
+        @RequestParam(required = false) Integer assignedById
+    ) {
+        List<AccessRequest> requests = accessRequestUseCase.findByEmployeeIdAndAssignedBy(employeeId, assignedById);
         List<AccessRequestDTO> dtos = requests.stream()
             .map(AccessRequestDTO::fromEntity)
-            .collect(Collectors.toList());
+            .toList();
         return ResponseEntity.ok(dtos);
     }
 
