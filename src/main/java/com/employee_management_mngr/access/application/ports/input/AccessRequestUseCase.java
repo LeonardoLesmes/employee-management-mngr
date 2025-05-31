@@ -5,4 +5,5 @@ import com.employee_management_mngr.access.domain.AccessRequest;
 
 public interface AccessRequestUseCase {
     List<AccessRequest> createAccessRequests(Integer employeeId, List<Integer> systemIds, Integer assignedById);
+    List<AccessRequest> findByEmployeeId(Integer employeeId);
 }

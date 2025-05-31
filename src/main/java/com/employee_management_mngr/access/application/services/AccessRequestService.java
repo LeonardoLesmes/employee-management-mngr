@@ -2,11 +2,12 @@ package com.employee_management_mngr.access.application.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.employee_management_mngr.access.application.exceptions.AccessRequestCreationException;
 import com.employee_management_mngr.access.application.ports.output.AccessRequestRepository;
 import com.employee_management_mngr.access.domain.AccessRequest;
 import com.employee_management_mngr.access.domain.AccessRequestStatus;
@@ -33,6 +34,17 @@ public class AccessRequestService {
             .map(systemId -> {
                 System system = systemUseCase.findSystemById(systemId);
                 
+                Optional<AccessRequest> existingRequest = accessRequestRepository.findByEmployeeAndSystem(employee, system);
+                
+                if (existingRequest.isPresent()) {
+                    AccessRequestStatus status = existingRequest.get().getStatus();
+                    if (status != AccessRequestStatus.CANCELLED && status != AccessRequestStatus.REJECTED) {
+                        throw new AccessRequestCreationException(
+                            "Access request already exists for employee " + employeeId + 
+                            " and system " + systemId + " with status " + status);
+                    }
+                }
+                
                 AccessRequest accessRequest = new AccessRequest();
                 accessRequest.setEmployee(employee);
                 accessRequest.setSystem(system);
@@ -43,5 +55,11 @@ public class AccessRequestService {
                 return accessRequestRepository.save(accessRequest);
             })
             .toList();
+    }
+
+    public List<AccessRequest> findByEmployeeId(Integer employeeId) {
+        // Verificar que el empleado existe
+        employeeUseCase.findEmployeeById(employeeId);
+        return accessRequestRepository.findByEmployeeId(employeeId);
     }
 }

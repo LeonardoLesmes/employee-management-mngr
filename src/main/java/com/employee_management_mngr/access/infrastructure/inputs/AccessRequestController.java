@@ -1,11 +1,16 @@
 package com.employee_management_mngr.access.infrastructure.inputs;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.employee_management_mngr.access.application.exceptions.AccessRequestCreationException;
 import com.employee_management_mngr.access.application.ports.input.AccessRequestUseCase;
+import com.employee_management_mngr.access.domain.AccessRequest;
+import com.employee_management_mngr.access.infrastructure.inputs.dto.AccessRequestDTO;
 import com.employee_management_mngr.access.infrastructure.inputs.dto.CreateAccessRequestDTO;
 import com.employee_management_mngr.system.application.exceptions.SystemNotFoundException;
 import com.employee_management_mngr.employee.application.exceptions.EmployeeNotFoundException;
@@ -26,6 +31,15 @@ public class AccessRequestController {
             request.getAssignedById()
         );
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<List<AccessRequestDTO>> getAccessRequestsByEmployeeId(@PathVariable Integer employeeId) {
+        List<AccessRequest> requests = accessRequestUseCase.findByEmployeeId(employeeId);
+        List<AccessRequestDTO> dtos = requests.stream()
+            .map(AccessRequestDTO::fromEntity)
+            .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @ExceptionHandler(EmployeeNotFoundException.class)
