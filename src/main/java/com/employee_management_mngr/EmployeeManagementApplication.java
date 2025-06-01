@@ -9,7 +9,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
     "com.employee_management_mngr.auth.domain",
     "com.employee_management_mngr.employee.domain",
     "com.employee_management_mngr.system.domain",
-    "com.employee_management_mngr.access.domain"
+    "com.employee_management_mngr.access.domain",
+	"com.employee_management_mngr.computer.domain",
 })
 public class EmployeeManagementApplication {
 
