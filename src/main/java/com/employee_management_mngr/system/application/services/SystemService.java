@@ -9,6 +9,8 @@ import com.employee_management_mngr.system.application.exceptions.SystemNotFound
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -18,5 +20,9 @@ public class SystemService {
     public System findSystemById(Integer id) {
         return systemRepository.findById(id)
             .orElseThrow(() -> new SystemNotFoundException("System not found with id: " + id));
+    }
+
+    public List<System> findAll() {
+        return systemRepository.findAll();
     }
 }

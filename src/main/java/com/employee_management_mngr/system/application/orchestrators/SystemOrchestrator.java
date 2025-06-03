@@ -1,5 +1,6 @@
 package com.employee_management_mngr.system.application.orchestrators;
 
+import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,5 +19,10 @@ public class SystemOrchestrator implements SystemUseCase {
     @Override
     public System findSystemById(Integer id) {
         return systemService.findSystemById(id);
+    }
+
+    @Override
+    public List<System> findAll() {
+        return systemService.findAll();
     }
 }
