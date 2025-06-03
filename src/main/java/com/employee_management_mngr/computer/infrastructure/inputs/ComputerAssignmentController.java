@@ -26,48 +26,53 @@ public class ComputerAssignmentController {
     @PostMapping
     public ResponseEntity<ComputerAssignmentDTO> createAssignment(@RequestBody CreateComputerAssignmentDTO request) {
         ComputerAssignment assignment = computerAssignmentUseCase.createAssignment(
-            request.getEmployeeId(),
-            request.getComputerId(),
-            request.getAssignedById()
-        );
+                request.getEmployeeId(),
+                request.getComputerId(),
+                request.getAssignedById());
         return ResponseEntity.ok(ComputerAssignmentDTO.fromEntity(assignment));
     }
 
     @PutMapping("/{id}/status/{status}")
     public ResponseEntity<ComputerAssignmentDTO> updateAssignmentStatus(
-        @PathVariable Integer id,
-        @PathVariable ComputerAssignmentStatus status
-    ) {
+            @PathVariable Integer id,
+            @PathVariable ComputerAssignmentStatus status) {
         ComputerAssignment assignment = computerAssignmentUseCase.updateAssignmentStatus(id, status);
         return ResponseEntity.ok(ComputerAssignmentDTO.fromEntity(assignment));
     }
-    
+
     @GetMapping("/employee/{employeeId}")
-    public ResponseEntity<List<ComputerAssignmentDTO>> getAssignmentsByEmployee(@PathVariable Integer employeeId) {
+    public ResponseEntity<ComputerAssignmentDTO> getAssignmentsByEmployee(@PathVariable Integer employeeId) {
         List<ComputerAssignmentDTO> assignments = computerAssignmentUseCase.findByEmployeeId(employeeId)
-            .stream()
-            .map(ComputerAssignmentDTO::fromEntity)
-            .toList();
-        return ResponseEntity.ok(assignments);
+                .stream()
+                .map(ComputerAssignmentDTO::fromEntity)
+                .toList();
+        if (assignments.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        else {
+            return ResponseEntity.ok(assignments.getFirst());
+        }
     }
-    
+
     @GetMapping("/assigned-by/{assignedById}")
     public ResponseEntity<List<ComputerAssignmentDTO>> getAssignmentsByAssignedBy(@PathVariable Integer assignedById) {
         List<ComputerAssignmentDTO> assignments = computerAssignmentUseCase.findByAssignedById(assignedById)
-            .stream()
-            .map(ComputerAssignmentDTO::fromEntity)
-            .toList();
+                .stream()
+                .map(ComputerAssignmentDTO::fromEntity)
+                .toList();
         return ResponseEntity.ok(assignments);
     }
 
     @GetMapping("/active")
     public ResponseEntity<List<ComputerAssignmentDTO>> getActiveAssignments() {
         List<ComputerAssignmentDTO> assignments = computerAssignmentUseCase.findActiveAssignments()
-            .stream()
-            .map(ComputerAssignmentDTO::fromEntity)
-            .toList();
+                .stream()
+                .map(ComputerAssignmentDTO::fromEntity)
+                .toList();
         return ResponseEntity.ok(assignments);
-    }    @GetMapping("/available")
+    }
+
+    @GetMapping("/available")
     public ResponseEntity<List<ComputerDTO>> getAvailableComputers() {
         List<Computer> computers = computerAssignmentUseCase.findAvailableComputers();
         List<ComputerDTO> dtos = computers.stream()
@@ -75,30 +80,30 @@ public class ComputerAssignmentController {
                 .toList();
         return ResponseEntity.ok(dtos);
     }
-      @GetMapping("/range")
+
+    @GetMapping("/range")
     public ResponseEntity<List<ComputerAssignmentDTO>> getAssignmentsByIdRange(
-        @RequestParam Integer startId,
-        @RequestParam Integer endId,
-        @RequestParam(required = false) Integer assignedById
-    ) {
+            @RequestParam Integer startId,
+            @RequestParam Integer endId,
+            @RequestParam(required = false) Integer assignedById) {
         List<ComputerAssignment> assignments;
-        
+
         if (assignedById == null) {
             assignments = computerAssignmentUseCase.findByIdRange(startId, endId);
         } else {
             assignments = computerAssignmentUseCase.findByIdRangeAndAssignedBy(startId, endId, assignedById);
         }
-        
+
         List<ComputerAssignmentDTO> assignmentDTOs = assignments.stream()
-            .map(ComputerAssignmentDTO::fromEntity)
-            .toList();
-            
+                .map(ComputerAssignmentDTO::fromEntity)
+                .toList();
+
         return ResponseEntity.ok(assignmentDTOs);
     }
-    
+
     @ExceptionHandler(ComputerAssignmentException.class)
     public ResponseEntity<String> handleComputerAssignmentException(ComputerAssignmentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(e.getMessage());
+                .body(e.getMessage());
     }
 }

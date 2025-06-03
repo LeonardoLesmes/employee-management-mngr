@@ -10,4 +10,6 @@ public interface AccessRequestUseCase {
     List<AccessRequest> findByEmployeeIdAndAssignedBy(Integer employeeId, Integer assignedById);
     List<AccessRequest> findByAssignedById(Integer assignedById);
     AccessRequest updateAccessRequestStatus(Integer requestId, AccessRequestStatus newStatus);
+    List<AccessRequest> findByIdRange(Integer startId, Integer endId);
+    List<AccessRequest> findByIdRangeAndAssignedBy(Integer startId, Integer endId, Integer assignedById);
 }

@@ -12,4 +12,6 @@ public interface EmployeeUseCase {
     Employee findEmployeeByEmail(String email);
     void updateEmployeeStatus(Integer employeeId, EmployeeStatus newStatus);
     List<Employee> findEmployeesByAssignedBy(Integer assignedById);
+    List<Employee> findEmployeesByIdRange(Integer startId, Integer endId);
+    List<Employee> findEmployeesByIdRangeAndAssignedBy(Integer startId, Integer endId, Integer assignedById);
 }

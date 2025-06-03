@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.employee_management_mngr.employee.application.exceptions.EmployeeNotFoundException;
@@ -32,14 +33,30 @@ public class EmployeeController {
     public ResponseEntity<Void> createEmployee(@RequestBody CreateEmployeeDto employee) {
         employeeOrchestrator.createEmployee(employee);
         return ResponseEntity.status(HttpStatus.CREATED).build();
-    }@GetMapping("/{id}")
+    }    @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployee(@PathVariable Integer id) {
         return ResponseEntity.ok(employeeOrchestrator.findEmployeeById(id));
     }
-    
-    @GetMapping("/assigned-by/{assignedById}")
+      @GetMapping("/assigned-by/{assignedById}")
     public ResponseEntity<List<Employee>> getEmployeesByAssignedBy(@PathVariable Integer assignedById) {
         List<Employee> employees = employeeOrchestrator.findEmployeesByAssignedBy(assignedById);
+        return ResponseEntity.ok(employees);
+    }
+        
+    @GetMapping("/range")
+    public ResponseEntity<List<Employee>> getEmployeesByIdRange(
+        @RequestParam Integer startId,
+        @RequestParam Integer endId,
+        @RequestParam(required = false) Integer assignedById
+    ) {
+        List<Employee> employees;
+        
+        if (assignedById == null) {
+            employees = employeeOrchestrator.findEmployeesByIdRange(startId, endId);
+        } else {
+            employees = employeeOrchestrator.findEmployeesByIdRangeAndAssignedBy(startId, endId, assignedById);
+        }
+        
         return ResponseEntity.ok(employees);
     }
 

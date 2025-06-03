@@ -103,8 +103,7 @@ public class EmployeeOrchestrator implements EmployeeUseCase {
             throw new ErrorCreationEmployee("Error updating employee status: " + e.getMessage(), e);
         }
     }
-    
-    @Override
+      @Override
     public List<Employee> findEmployeesByAssignedBy(Integer assignedById) {
         try {
             return employeeService.findEmployeesByAssignedBy(assignedById);
@@ -112,6 +111,28 @@ public class EmployeeOrchestrator implements EmployeeUseCase {
             logger.error("Error finding employees assigned by ID {}: {}", 
                         assignedById, e.getMessage(), e);
             throw new ErrorCreationEmployee("Error finding employees by assignedBy ID " + assignedById + ": " + e.getMessage(), e);
+        }
+    }
+    
+    @Override
+    public List<Employee> findEmployeesByIdRange(Integer startId, Integer endId) {
+        try {
+            return employeeService.findEmployeesByIdRange(startId, endId);
+        } catch (Exception e) {
+            logger.error("Error finding employees by ID range {} to {}: {}", 
+                        startId, endId, e.getMessage(), e);
+            throw new ErrorCreationEmployee("Error finding employees by ID range: " + e.getMessage(), e);
+        }
+    }
+    
+    @Override
+    public List<Employee> findEmployeesByIdRangeAndAssignedBy(Integer startId, Integer endId, Integer assignedById) {
+        try {
+            return employeeService.findEmployeesByIdRangeAndAssignedBy(startId, endId, assignedById);
+        } catch (Exception e) {
+            logger.error("Error finding employees by ID range {} to {} and assignedBy ID {}: {}", 
+                        startId, endId, assignedById, e.getMessage(), e);
+            throw new ErrorCreationEmployee("Error finding employees by ID range and assignedBy: " + e.getMessage(), e);
         }
     }
 }

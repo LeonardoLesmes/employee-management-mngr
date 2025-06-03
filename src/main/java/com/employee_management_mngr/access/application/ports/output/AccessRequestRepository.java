@@ -12,4 +12,6 @@ public interface AccessRequestRepository {
     Optional<AccessRequest> findByEmployeeAndSystem(Employee employee, System system);
     List<AccessRequest> findByEmployeeId(Integer employeeId);
     List<AccessRequest> findByAssignedById(Integer assignedById);
+    List<AccessRequest> findByIdRange(Integer startId, Integer endId);
+    List<AccessRequest> findByIdRangeAndAssignedBy(Integer startId, Integer endId, Employee assignedBy);
 }

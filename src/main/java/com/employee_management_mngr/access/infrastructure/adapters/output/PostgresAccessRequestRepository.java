@@ -64,15 +64,46 @@ public class PostgresAccessRequestRepository implements AccessRequestRepository 
         query.where(cb.equal(root.get("employee").get("id"), employeeId));
         
         return em.createQuery(query).getResultList();
-    }
-
-    @Override
+    }    @Override
     public List<AccessRequest> findByAssignedById(Integer assignedById) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AccessRequest> query = cb.createQuery(AccessRequest.class);
         Root<AccessRequest> root = query.from(AccessRequest.class);
         
         query.where(cb.equal(root.get("assignedBy").get("id"), assignedById));
+        
+        return em.createQuery(query).getResultList();
+    }
+    
+    @Override
+    public List<AccessRequest> findByIdRange(Integer startId, Integer endId) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<AccessRequest> query = cb.createQuery(AccessRequest.class);
+        Root<AccessRequest> root = query.from(AccessRequest.class);
+        
+        query.where(
+            cb.and(
+                cb.greaterThanOrEqualTo(root.get("id"), startId),
+                cb.lessThanOrEqualTo(root.get("id"), endId)
+            )
+        );
+        
+        return em.createQuery(query).getResultList();
+    }
+    
+    @Override
+    public List<AccessRequest> findByIdRangeAndAssignedBy(Integer startId, Integer endId, Employee assignedBy) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<AccessRequest> query = cb.createQuery(AccessRequest.class);
+        Root<AccessRequest> root = query.from(AccessRequest.class);
+        
+        query.where(
+            cb.and(
+                cb.greaterThanOrEqualTo(root.get("id"), startId),
+                cb.lessThanOrEqualTo(root.get("id"), endId),
+                cb.equal(root.get("assignedBy"), assignedBy)
+            )
+        );
         
         return em.createQuery(query).getResultList();
     }

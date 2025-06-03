@@ -79,9 +79,7 @@ public class AccessRequestService {
         employeeUseCase.findEmployeeById(assignedById);
         
         return accessRequestRepository.findByAssignedById(assignedById);
-    }
-
-    public AccessRequest updateAccessRequestStatus(Integer requestId, AccessRequestStatus newStatus) {
+    }    public AccessRequest updateAccessRequestStatus(Integer requestId, AccessRequestStatus newStatus) {
         AccessRequest accessRequest = accessRequestRepository.findById(requestId)
             .orElseThrow(() -> new AccessRequestCreationException("Access request not found with id: " + requestId));
         
@@ -95,5 +93,34 @@ public class AccessRequestService {
         }
         
         return accessRequestRepository.save(accessRequest);
+    }
+    
+    public List<AccessRequest> findByIdRange(Integer startId, Integer endId) {
+        if (startId == null || endId == null) {
+            throw new AccessRequestCreationException("Start ID and End ID cannot be null");
+        }
+        
+        if (startId > endId) {
+            throw new AccessRequestCreationException("Start ID cannot be greater than End ID");
+        }
+        
+        return accessRequestRepository.findByIdRange(startId, endId);
+    }
+    
+    public List<AccessRequest> findByIdRangeAndAssignedBy(Integer startId, Integer endId, Integer assignedById) {
+        if (startId == null || endId == null) {
+            throw new AccessRequestCreationException("Start ID and End ID cannot be null");
+        }
+        
+        if (startId > endId) {
+            throw new AccessRequestCreationException("Start ID cannot be greater than End ID");
+        }
+        
+        if (assignedById == null) {
+            return findByIdRange(startId, endId);
+        }
+        
+        Employee assignedBy = employeeUseCase.findEmployeeById(assignedById);
+        return accessRequestRepository.findByIdRangeAndAssignedBy(startId, endId, assignedBy);
     }
 }

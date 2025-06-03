@@ -44,8 +44,7 @@ public class AccessRequestController {
             .toList();
         return ResponseEntity.ok(dtos);
     }
-    
-    @GetMapping("/assigned-by/{assignedById}")
+      @GetMapping("/assigned-by/{assignedById}")
     public ResponseEntity<List<AccessRequestDTO>> getAccessRequestsByAssignedById(
         @PathVariable Integer assignedById
     ) {
@@ -53,6 +52,27 @@ public class AccessRequestController {
         List<AccessRequestDTO> dtos = requests.stream()
             .map(AccessRequestDTO::fromEntity)
             .toList();
+        return ResponseEntity.ok(dtos);
+    }
+    
+    @GetMapping("/range")
+    public ResponseEntity<List<AccessRequestDTO>> getAccessRequestsByIdRange(
+        @RequestParam Integer startId,
+        @RequestParam Integer endId,
+        @RequestParam(required = false) Integer assignedById
+    ) {
+        List<AccessRequest> requests;
+        
+        if (assignedById == null) {
+            requests = accessRequestUseCase.findByIdRange(startId, endId);
+        } else {
+            requests = accessRequestUseCase.findByIdRangeAndAssignedBy(startId, endId, assignedById);
+        }
+        
+        List<AccessRequestDTO> dtos = requests.stream()
+            .map(AccessRequestDTO::fromEntity)
+            .toList();
+            
         return ResponseEntity.ok(dtos);
     }
 
