@@ -18,6 +18,7 @@ import com.employee_management_mngr.employee.application.exceptions.InvalidEmplo
 import com.employee_management_mngr.employee.application.orchestrator.EmployeeOrchestrator;
 import com.employee_management_mngr.employee.domain.employee.Employee;
 import com.employee_management_mngr.employee.domain.employee.EmployeeStatus;
+import com.employee_management_mngr.employee.infrastructure.adapters.inputs.dto.CreateEmployeeDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,16 +29,16 @@ public class EmployeeController {
     private final EmployeeOrchestrator employeeOrchestrator;
 
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-            .body(employeeOrchestrator.createEmployee(employee));
+    public ResponseEntity<Void> createEmployee(@RequestBody CreateEmployeeDto employee) {
+        employeeOrchestrator.createEmployee(employee);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/unsafe") // This endpoint is for testing purposes only and should not be used in production
-    public ResponseEntity<Employee> createEmployeeUnsafe(@RequestBody Employee employee) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-            .body(employeeOrchestrator.createEmployee(employee));
-    }
+    // @PostMapping("/unsafe") // This endpoint is for testing purposes only and should not be used in production
+    // public ResponseEntity<Employee> createEmployeeUnsafe(@RequestBody Employee employee) {
+    //     return ResponseEntity.status(HttpStatus.CREATED)
+    //         .body(employeeOrchestrator.createEmployee(employee));
+    // }
 
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployee(@PathVariable Integer id) {
