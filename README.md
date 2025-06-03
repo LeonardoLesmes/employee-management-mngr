@@ -142,6 +142,89 @@ Response:
 ]
 ```
 
+## Roles
+
+### Available Roles
+
+#### Non-Login Roles (Standard Employee Roles)
+- DEV_JUNIOR: Junior Developer
+- DEV_SEMI: Semi-Senior Developer
+- DEV_SENIOR: Senior Developer
+- TECH_LEAD: Technical Lead
+- QA_ANALYST: Quality Assurance Analyst
+- QA_AUTOMATION: QA Automation Engineer
+- DEVOPS_ENGINEER: DevOps Engineer
+- SRE: Site Reliability Engineer
+- UX_DESIGNER: User Experience Designer
+- UI_DESIGNER: User Interface Designer
+- PROJECT_MANAGER: Project Manager
+- SCRUM_MASTER: Scrum Master
+- AGILE_COACH: Agile Coach
+- PRODUCT_OWNER: Product Owner
+
+### Get All Roles (Non-Login Roles Only)
+```bash
+curl -X GET "http://localhost:8080/api/roles"
+```
+
+Response:
+```json
+[
+  {
+    "id": 2,
+    "type": "DEV_SENIOR",
+    "description": "Senior Developer",
+    "canLogin": false
+  },
+  {
+    "id": 3,
+    "type": "QA_ANALYST",
+    "description": "Quality Assurance Analyst",
+    "canLogin": false
+  }
+]
+```
+
+### Get Login-Capable Roles
+```bash
+curl -X GET "http://localhost:8080/api/roles/login-capable"
+```
+
+Response:
+```json
+[
+  {
+    "id": 1,
+    "type": "ADMIN",
+    "description": "System Administrator",
+    "canLogin": true
+  },
+  {
+    "id": 4,
+    "type": "IT",
+    "description": "IT Support",
+    "canLogin": true
+  }
+]
+```
+
+### Get Role by ID
+```bash
+curl -X GET "http://localhost:8080/api/roles/1" \
+-H "Authorization: Bearer your-jwt-token"
+```
+
+Response:
+```json
+{
+  "id": 1,
+  "type": "ADMIN",
+  "description": "System Administrator",
+  "canLogin": true
+}
+```
+
+
 ### Get System by ID
 ```bash
 curl -X GET "http://localhost:8080/api/systems/1" \

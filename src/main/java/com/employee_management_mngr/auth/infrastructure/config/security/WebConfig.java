@@ -25,16 +25,16 @@ public class WebConfig {
     public WebConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
-
+    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .cors(Customizer.withDefaults())
             .csrf(CsrfConfigurer::disable)
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .authorizeHttpRequests(auth -> auth
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)            .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/api/auth/login","/api/health", "/api/auth/create-password", "/api/employees/unsafe", "/api/auth/validate-token"
+                    "/api/auth/login", "/api/health", "/api/auth/create-password", 
+                    "/api/employees/unsafe", "/api/auth/validate-token"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
