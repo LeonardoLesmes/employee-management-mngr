@@ -2,9 +2,11 @@ package com.employee_management_mngr.computer.infrastructure.inputs;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.employee_management_mngr.computer.application.exceptions.ComputerAssignmentException;
 import com.employee_management_mngr.computer.application.ports.input.ComputerAssignmentUseCase;
 import com.employee_management_mngr.computer.domain.Computer;
 import com.employee_management_mngr.computer.domain.ComputerAssignment;
@@ -39,10 +41,19 @@ public class ComputerAssignmentController {
         ComputerAssignment assignment = computerAssignmentUseCase.updateAssignmentStatus(id, status);
         return ResponseEntity.ok(ComputerAssignmentDTO.fromEntity(assignment));
     }
-
+    
     @GetMapping("/employee/{employeeId}")
     public ResponseEntity<List<ComputerAssignmentDTO>> getAssignmentsByEmployee(@PathVariable Integer employeeId) {
         List<ComputerAssignmentDTO> assignments = computerAssignmentUseCase.findByEmployeeId(employeeId)
+            .stream()
+            .map(ComputerAssignmentDTO::fromEntity)
+            .toList();
+        return ResponseEntity.ok(assignments);
+    }
+    
+    @GetMapping("/assigned-by/{assignedById}")
+    public ResponseEntity<List<ComputerAssignmentDTO>> getAssignmentsByAssignedBy(@PathVariable Integer assignedById) {
+        List<ComputerAssignmentDTO> assignments = computerAssignmentUseCase.findByAssignedById(assignedById)
             .stream()
             .map(ComputerAssignmentDTO::fromEntity)
             .toList();
@@ -56,14 +67,18 @@ public class ComputerAssignmentController {
             .map(ComputerAssignmentDTO::fromEntity)
             .toList();
         return ResponseEntity.ok(assignments);
-    }
-
-    @GetMapping("/available")
+    }    @GetMapping("/available")
     public ResponseEntity<List<ComputerDTO>> getAvailableComputers() {
         List<Computer> computers = computerAssignmentUseCase.findAvailableComputers();
         List<ComputerDTO> dtos = computers.stream()
                 .map(ComputerDTO::fromEntity)
                 .toList();
         return ResponseEntity.ok(dtos);
+    }
+    
+    @ExceptionHandler(ComputerAssignmentException.class)
+    public ResponseEntity<String> handleComputerAssignmentException(ComputerAssignmentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(e.getMessage());
     }
 }

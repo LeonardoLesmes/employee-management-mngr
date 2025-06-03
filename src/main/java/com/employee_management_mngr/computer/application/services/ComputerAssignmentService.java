@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.employee_management_mngr.computer.application.exceptions.ComputerAssignmentException;
 import com.employee_management_mngr.computer.application.ports.output.ComputerAssignmentRepository;
 import com.employee_management_mngr.computer.application.ports.output.ComputerRepository;
 import com.employee_management_mngr.computer.domain.Computer;
@@ -24,16 +25,14 @@ import lombok.RequiredArgsConstructor;
 public class ComputerAssignmentService {
     private final ComputerAssignmentRepository computerAssignmentRepository;
     private final ComputerRepository computerRepository;
-    private final EmployeeUseCase employeeUseCase;
-
-    public ComputerAssignment createAssignment(Integer employeeId, Integer computerId, Integer assignedById) {
+    private final EmployeeUseCase employeeUseCase;    public ComputerAssignment createAssignment(Integer employeeId, Integer computerId, Integer assignedById) {
         Employee employee = employeeUseCase.findEmployeeById(employeeId);
         Employee assignedBy = employeeUseCase.findEmployeeById(assignedById);
         Computer computer = computerRepository.findById(computerId)
-            .orElseThrow(() -> new RuntimeException("Computer not found with id: " + computerId));
+            .orElseThrow(() -> new ComputerAssignmentException("Computer not found with id: " + computerId));
 
         if (computer.getStatus() != ComputerStatus.AVAILABLE) {
-            throw new RuntimeException("Computer is not available for assignment");
+            throw new ComputerAssignmentException("Computer is not available for assignment");
         }
 
         ComputerAssignment assignment = new ComputerAssignment();
@@ -44,11 +43,9 @@ public class ComputerAssignmentService {
         assignment.setRequestDate(LocalDateTime.now());
 
         return computerAssignmentRepository.save(assignment);
-    }
-
-    public ComputerAssignment updateAssignmentStatus(Integer assignmentId, ComputerAssignmentStatus status) {
+    }    public ComputerAssignment updateAssignmentStatus(Integer assignmentId, ComputerAssignmentStatus status) {
         ComputerAssignment assignment = computerAssignmentRepository.findById(assignmentId)
-            .orElseThrow(() -> new RuntimeException("Assignment not found with id: " + assignmentId));
+            .orElseThrow(() -> new ComputerAssignmentException("Assignment not found with id: " + assignmentId));
 
         assignment.setStatus(status);
         assignment.setResolutionDate(LocalDateTime.now());
@@ -61,11 +58,16 @@ public class ComputerAssignmentService {
         }
 
         return computerAssignmentRepository.save(assignment);
-    }
-
-    public List<ComputerAssignment> findByEmployeeId(Integer employeeId) {
+    }    public List<ComputerAssignment> findByEmployeeId(Integer employeeId) {
         Employee employee = employeeUseCase.findEmployeeById(employeeId);
         return computerAssignmentRepository.findByEmployee(employee);
+    }
+      public List<ComputerAssignment> findByAssignedById(Integer assignedById) {
+        if (assignedById == null) {
+            throw new ComputerAssignmentException("AssignedBy ID cannot be null");
+        }
+        Employee assignedBy = employeeUseCase.findEmployeeById(assignedById);
+        return computerAssignmentRepository.findByAssignedBy(assignedBy);
     }
 
     public List<ComputerAssignment> findActiveAssignments() {

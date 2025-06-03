@@ -11,5 +11,6 @@ public interface ComputerAssignmentRepository {
     Optional<ComputerAssignment> findById(Integer id);
     List<ComputerAssignment> findByEmployee(Employee employee);
     List<ComputerAssignment> findByComputer(Computer computer);
+    List<ComputerAssignment> findByAssignedBy(Employee assignedBy);
     Optional<ComputerAssignment> findActiveAssignmentByComputer(Computer computer);
 }

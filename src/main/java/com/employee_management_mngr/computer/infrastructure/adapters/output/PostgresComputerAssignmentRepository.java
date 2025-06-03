@@ -58,9 +58,7 @@ public class PostgresComputerAssignmentRepository implements ComputerAssignmentR
         query.where(cb.equal(root.get("computer"), computer));
         
         return em.createQuery(query).getResultList();
-    }
-
-    @Override
+    }    @Override
     public Optional<ComputerAssignment> findActiveAssignmentByComputer(Computer computer) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<ComputerAssignment> query = cb.createQuery(ComputerAssignment.class);
@@ -81,5 +79,16 @@ public class PostgresComputerAssignmentRepository implements ComputerAssignmentR
         } catch (NoResultException e) {
             return Optional.empty();
         }
+    }
+    
+    @Override
+    public List<ComputerAssignment> findByAssignedBy(Employee assignedBy) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ComputerAssignment> query = cb.createQuery(ComputerAssignment.class);
+        Root<ComputerAssignment> root = query.from(ComputerAssignment.class);
+        
+        query.where(cb.equal(root.get("assignedBy"), assignedBy));
+        
+        return em.createQuery(query).getResultList();
     }
 }

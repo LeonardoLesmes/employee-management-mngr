@@ -27,11 +27,14 @@ public class ComputerAssignmentOrchestrator implements ComputerAssignmentUseCase
     @Override
     public ComputerAssignment updateAssignmentStatus(Integer assignmentId, ComputerAssignmentStatus status) {
         return computerAssignmentService.updateAssignmentStatus(assignmentId, status);
-    }
-
-    @Override
+    }    @Override
     public List<ComputerAssignment> findByEmployeeId(Integer employeeId) {
         return computerAssignmentService.findByEmployeeId(employeeId);
+    }
+    
+    @Override
+    public List<ComputerAssignment> findByAssignedById(Integer assignedById) {
+        return computerAssignmentService.findByAssignedById(assignedById);
     }
 
     @Override
