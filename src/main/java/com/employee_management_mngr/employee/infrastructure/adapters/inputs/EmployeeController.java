@@ -1,5 +1,7 @@
 package com.employee_management_mngr.employee.infrastructure.adapters.inputs;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,23 +28,19 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/employees")
 @RequiredArgsConstructor
 public class EmployeeController {
-    private final EmployeeOrchestrator employeeOrchestrator;
-
-    @PostMapping
+    private final EmployeeOrchestrator employeeOrchestrator;    @PostMapping
     public ResponseEntity<Void> createEmployee(@RequestBody CreateEmployeeDto employee) {
         employeeOrchestrator.createEmployee(employee);
         return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    // @PostMapping("/unsafe") // This endpoint is for testing purposes only and should not be used in production
-    // public ResponseEntity<Employee> createEmployeeUnsafe(@RequestBody Employee employee) {
-    //     return ResponseEntity.status(HttpStatus.CREATED)
-    //         .body(employeeOrchestrator.createEmployee(employee));
-    // }
-
-    @GetMapping("/{id}")
+    }@GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployee(@PathVariable Integer id) {
         return ResponseEntity.ok(employeeOrchestrator.findEmployeeById(id));
+    }
+    
+    @GetMapping("/assigned-by/{assignedById}")
+    public ResponseEntity<List<Employee>> getEmployeesByAssignedBy(@PathVariable Integer assignedById) {
+        List<Employee> employees = employeeOrchestrator.findEmployeesByAssignedBy(assignedById);
+        return ResponseEntity.ok(employees);
     }
 
     @PutMapping("/{id}/status/{status}")

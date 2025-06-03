@@ -1,5 +1,7 @@
 package com.employee_management_mngr.employee.application.orchestrator;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,15 +62,14 @@ public class EmployeeOrchestrator implements EmployeeUseCase {
         
         Employee savedEmployee = employeeService.createEmployee(employee);
         setupEmployeePostCreation(savedEmployee);
-    }
-
-    private void setupEmployeePostCreation(Employee employee) {
+    }    private void setupEmployeePostCreation(Employee employee) {
         try {
             createEmployeeCredentials(employee);
             notifyThirdPartyServices(employee);
         } catch (Exception e) {
-            logger.error("Error during post-creation setup for employee", e);
-            throw new ErrorPostCreationEmployee();
+            logger.error("Error during post-creation setup for employee ID {}: {}", 
+                        employee.getId(), e.getMessage(), e);
+            throw new ErrorPostCreationEmployee("Failed to complete setup for employee ID " + employee.getId(), e);
         }
     }
 
@@ -92,15 +93,25 @@ public class EmployeeOrchestrator implements EmployeeUseCase {
     @Override
     public Employee findEmployeeByEmail(String email) {
         return employeeService.findEmployeeByEmail(email);
-    }
-
-    @Override
+    }    @Override
     public void updateEmployeeStatus(Integer employeeId, EmployeeStatus newStatus) {
         try {
             employeeService.updateEmployeeStatus(employeeId, newStatus);
         } catch (Exception e) {
-            logger.error("Error updating employee status: {}", e.getMessage(), e);
-            throw new ErrorCreationEmployee("Error updating employee status: " + e.getMessage());
+            logger.error("Error updating status to {} for employee ID {}: {}", 
+                        newStatus, employeeId, e.getMessage(), e);
+            throw new ErrorCreationEmployee("Error updating employee status: " + e.getMessage(), e);
+        }
+    }
+    
+    @Override
+    public List<Employee> findEmployeesByAssignedBy(Integer assignedById) {
+        try {
+            return employeeService.findEmployeesByAssignedBy(assignedById);
+        } catch (Exception e) {
+            logger.error("Error finding employees assigned by ID {}: {}", 
+                        assignedById, e.getMessage(), e);
+            throw new ErrorCreationEmployee("Error finding employees by assignedBy ID " + assignedById + ": " + e.getMessage(), e);
         }
     }
 }

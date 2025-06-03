@@ -1,6 +1,7 @@
 package com.employee_management_mngr.employee.application.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,14 +75,19 @@ public class EmployeeService {
     public Employee findEmployeeByEmail(String email) {
         return employeeRepository.findByEmail(email)
             .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with email: " + email));
-    }
-
-    public Employee updateEmployeeStatus(Integer employeeId, EmployeeStatus newStatus) {
+    }    public Employee updateEmployeeStatus(Integer employeeId, EmployeeStatus newStatus) {
         Employee employee = findEmployeeById(employeeId);        
         if (newStatus == null) {
             throw new InvalidEmployeeRequest("Status cannot be null");
         }        
         employee.setStatus(newStatus);
         return employeeRepository.save(employee);
+    }
+    
+    public List<Employee> findEmployeesByAssignedBy(Integer assignedBy) {
+        if (assignedBy == null) {
+            throw new InvalidEmployeeRequest("AssignedBy ID cannot be null");
+        }
+        return employeeRepository.findByAssignedBy(assignedBy);
     }
 }

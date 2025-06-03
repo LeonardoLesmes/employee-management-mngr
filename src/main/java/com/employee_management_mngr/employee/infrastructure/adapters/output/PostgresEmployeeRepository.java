@@ -1,5 +1,6 @@
 package com.employee_management_mngr.employee.infrastructure.adapters.output;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -53,9 +54,7 @@ public class PostgresEmployeeRepository implements EmployeeRepository {
         } catch (Exception e) {
             return Optional.empty();
         }
-    }
-
-    @Override
+    }    @Override
     public Employee save(Employee employee) {
         if (employee.getId() == null) {
             em.persist(employee);
@@ -63,5 +62,18 @@ public class PostgresEmployeeRepository implements EmployeeRepository {
         } else {
             return em.merge(employee);
         }
+    }
+
+    @Override
+    public List<Employee> findByAssignedBy(Integer assignedBy) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Employee> query = cb.createQuery(Employee.class);
+        
+        Root<Employee> employee = query.from(Employee.class);
+        employee.fetch("role", JoinType.LEFT);
+        
+        query.where(cb.equal(employee.get("assignedBy"), assignedBy));
+        
+        return em.createQuery(query).getResultList();
     }
 }

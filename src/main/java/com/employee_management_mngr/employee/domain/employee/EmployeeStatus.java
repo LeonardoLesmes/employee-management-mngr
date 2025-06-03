@@ -7,7 +7,7 @@ public enum EmployeeStatus {
     PENDING("pending"),
     APPROVED("approved"),
     REJECTED("rejected"),
-    CANCELLED("cancelled");
+    CANCELED("cancelled");
 
     private final String value;
 
