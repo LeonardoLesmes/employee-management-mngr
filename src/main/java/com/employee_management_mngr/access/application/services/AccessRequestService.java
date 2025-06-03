@@ -55,9 +55,7 @@ public class AccessRequestService {
                 return accessRequestRepository.save(accessRequest);
             })
             .toList();
-    }
-
-    public List<AccessRequest> findByEmployeeIdAndAssignedBy(Integer employeeId, Integer assignedById) {
+    }    public List<AccessRequest> findByEmployeeIdAndAssignedBy(Integer employeeId, Integer assignedById) {
         List<AccessRequest> requests = findByEmployeeId(employeeId);    
         if (assignedById == null) {
             return requests;
@@ -70,6 +68,17 @@ public class AccessRequestService {
     public List<AccessRequest> findByEmployeeId(Integer employeeId) {
         employeeUseCase.findEmployeeById(employeeId);
         return accessRequestRepository.findByEmployeeId(employeeId);
+    }
+    
+    public List<AccessRequest> findByAssignedById(Integer assignedById) {
+        if (assignedById == null) {
+            throw new AccessRequestCreationException("AssignedBy ID cannot be null");
+        }
+        
+        // Verificamos que el empleado existe
+        employeeUseCase.findEmployeeById(assignedById);
+        
+        return accessRequestRepository.findByAssignedById(assignedById);
     }
 
     public AccessRequest updateAccessRequestStatus(Integer requestId, AccessRequestStatus newStatus) {
