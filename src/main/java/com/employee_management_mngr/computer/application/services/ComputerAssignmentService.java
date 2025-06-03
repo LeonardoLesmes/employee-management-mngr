@@ -77,9 +77,27 @@ public class ComputerAssignmentService {
             .filter(Optional::isPresent)
             .map(Optional::get)
             .toList();
-    }
-
-    public List<Computer> findAvailableComputers() {
+    }    public List<Computer> findAvailableComputers() {
         return computerRepository.findAvailableComputers();
+    }
+      public List<ComputerAssignment> findByIdRange(Integer startId, Integer endId) {
+        return findByIdRangeAndAssignedBy(startId, endId, null);
+    }
+    
+    public List<ComputerAssignment> findByIdRangeAndAssignedBy(Integer startId, Integer endId, Integer assignedById) {
+        if (startId == null || endId == null) {
+            throw new ComputerAssignmentException("Start ID and End ID cannot be null");
+        }
+        
+        if (startId > endId) {
+            throw new ComputerAssignmentException("Start ID cannot be greater than End ID");
+        }
+        
+        if (assignedById == null) {
+            return computerAssignmentRepository.findByIdRange(startId, endId);
+        } else {
+            Employee assignedBy = employeeUseCase.findEmployeeById(assignedById);
+            return computerAssignmentRepository.findByIdRangeAndAssignedBy(startId, endId, assignedBy);
+        }
     }
 }

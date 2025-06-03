@@ -40,10 +40,18 @@ public class ComputerAssignmentOrchestrator implements ComputerAssignmentUseCase
     @Override
     public List<ComputerAssignment> findActiveAssignments() {
         return computerAssignmentService.findActiveAssignments();
-    }
-
-    @Override
+    }    @Override
     public List<Computer> findAvailableComputers() {
         return computerAssignmentService.findAvailableComputers();
+    }
+    
+    @Override
+    public List<ComputerAssignment> findByIdRange(Integer startId, Integer endId) {
+        return computerAssignmentService.findByIdRange(startId, endId);
+    }
+    
+    @Override
+    public List<ComputerAssignment> findByIdRangeAndAssignedBy(Integer startId, Integer endId, Integer assignedById) {
+        return computerAssignmentService.findByIdRangeAndAssignedBy(startId, endId, assignedById);
     }
 }

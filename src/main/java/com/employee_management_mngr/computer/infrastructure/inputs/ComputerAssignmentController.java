@@ -75,6 +75,26 @@ public class ComputerAssignmentController {
                 .toList();
         return ResponseEntity.ok(dtos);
     }
+      @GetMapping("/range")
+    public ResponseEntity<List<ComputerAssignmentDTO>> getAssignmentsByIdRange(
+        @RequestParam Integer startId,
+        @RequestParam Integer endId,
+        @RequestParam(required = false) Integer assignedById
+    ) {
+        List<ComputerAssignment> assignments;
+        
+        if (assignedById == null) {
+            assignments = computerAssignmentUseCase.findByIdRange(startId, endId);
+        } else {
+            assignments = computerAssignmentUseCase.findByIdRangeAndAssignedBy(startId, endId, assignedById);
+        }
+        
+        List<ComputerAssignmentDTO> assignmentDTOs = assignments.stream()
+            .map(ComputerAssignmentDTO::fromEntity)
+            .toList();
+            
+        return ResponseEntity.ok(assignmentDTOs);
+    }
     
     @ExceptionHandler(ComputerAssignmentException.class)
     public ResponseEntity<String> handleComputerAssignmentException(ComputerAssignmentException e) {
