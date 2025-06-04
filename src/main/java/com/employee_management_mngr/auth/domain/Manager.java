@@ -39,7 +39,7 @@ public class Manager {
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

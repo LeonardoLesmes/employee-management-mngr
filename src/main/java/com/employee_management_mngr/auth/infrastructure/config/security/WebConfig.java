@@ -30,9 +30,8 @@ public class WebConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults()).csrf(CsrfConfigurer::disable)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login", "/api/health", "/api/auth/set-password", "/api/auth/validate-token")
-                        .permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/login", "/api/health",
+                        "/api/auth/set-password", "/api/auth/validate-token").permitAll().anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();

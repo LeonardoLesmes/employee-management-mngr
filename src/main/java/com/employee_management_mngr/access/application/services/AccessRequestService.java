@@ -49,7 +49,7 @@ public class AccessRequestService {
                 }
             }
 
-            AccessRequest accessRequest = new AccessRequest();            
+            AccessRequest accessRequest = new AccessRequest();
             accessRequest.setEmployee(employee);
             accessRequest.setSystem(system);
             accessRequest.setStatus(AccessRequestStatus.PENDING);

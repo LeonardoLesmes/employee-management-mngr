@@ -8,8 +8,12 @@ import com.employee_management_mngr.employee.domain.employee.Employee;
 
 public interface ComputerAssignmentRepository {
     ComputerAssignment save(ComputerAssignment assignment);
+
     Optional<ComputerAssignment> findById(Integer id);
+
     List<ComputerAssignment> findByEmployee(Employee employee);
+
     List<ComputerAssignment> findByComputer(Computer computer);
+
     List<ComputerAssignment> findByAssignedBy(Integer assignedBy);
 }

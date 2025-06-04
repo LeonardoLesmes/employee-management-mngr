@@ -35,7 +35,7 @@ public class PostgresManagerRepository implements ManagerRepository {
             return Optional.empty();
         }
     }
-    
+
     @Override
     @Transactional
     public Manager save(Manager manager) {

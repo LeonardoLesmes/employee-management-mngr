@@ -38,9 +38,9 @@ public class CredentialsService {
 
     public void createPassword(AuthRequest request) {
         Optional<ManagerCredentials> existingCredentials = authRepository.findByManagerEmail(request.getEmail());
-        
+
         ManagerCredentials credentials;
-        
+
         if (existingCredentials.isPresent()) {
             credentials = existingCredentials.get();
             if (credentials.getPasswordHash() != null && !credentials.getPasswordHash().isEmpty()) {
@@ -48,7 +48,7 @@ public class CredentialsService {
             }
         } else {
             Manager manager = managerUseCase.findManagerByEmail(request.getEmail());
-            
+
             credentials = new ManagerCredentials();
             credentials.setManager(manager);
         }

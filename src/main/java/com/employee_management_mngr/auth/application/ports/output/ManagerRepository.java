@@ -6,6 +6,6 @@ import com.employee_management_mngr.auth.domain.Manager;
 
 public interface ManagerRepository {
     Optional<Manager> findByEmail(String email);
-    
+
     Manager save(Manager manager);
 }

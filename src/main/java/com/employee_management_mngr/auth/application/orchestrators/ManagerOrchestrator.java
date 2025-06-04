@@ -13,13 +13,13 @@ public class ManagerOrchestrator implements ManagerUseCase {
 
     private final com.employee_management_mngr.auth.application.ports.output.ManagerRepository managerRepository;
 
-    public ManagerOrchestrator(com.employee_management_mngr.auth.application.ports.output.ManagerRepository managerRepository) {
+    public ManagerOrchestrator(
+            com.employee_management_mngr.auth.application.ports.output.ManagerRepository managerRepository) {
         this.managerRepository = managerRepository;
     }
 
     @Override
     public Manager findManagerByEmail(String email) {
-        return managerRepository.findByEmail(email)
-                .orElseThrow(() -> new AuthenticationException("Manager not found"));
+        return managerRepository.findByEmail(email).orElseThrow(() -> new AuthenticationException("Manager not found"));
     }
 }

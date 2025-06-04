@@ -56,7 +56,7 @@ public class Employee {
 
     @Column(name = "resolution_date", nullable = true)
     private LocalDateTime resolutionDate;
-    
+
     @PrePersist
     protected void onCreate() {
         requestDate = LocalDateTime.now();

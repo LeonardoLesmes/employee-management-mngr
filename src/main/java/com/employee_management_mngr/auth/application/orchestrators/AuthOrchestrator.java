@@ -29,22 +29,18 @@ public class AuthOrchestrator implements AuthUseCase {
     public AuthResponse authenticateManager(AuthRequest request) {
         Manager manager = this.managerUseCase.findManagerByEmail(request.getEmail());
         ManagerRole role = manager.getRole();
-        
+
         credentialsService.isValidCredentials(request.getEmail(), request.getPassword());
 
         String token = jwtService.generateToken(manager.getId(), role.getName());
 
-        return AuthResponse.builder()
-                .id(manager.getId())
-                .name(manager.getName())
-                .role(manager.getRole().getName())
-                .token(token)
-                .build();
+        return AuthResponse.builder().id(manager.getId()).name(manager.getName()).role(manager.getRole().getName())
+                .token(token).build();
     }
 
     @Override
-    public void createManagerPassword(CreateManagerPasswordRequest request) {        
-        Manager manager = this.managerUseCase.findManagerByEmail(request.getEmail());    
+    public void createManagerPassword(CreateManagerPasswordRequest request) {
+        Manager manager = this.managerUseCase.findManagerByEmail(request.getEmail());
         if (!Boolean.TRUE.equals(manager.getIsActive())) {
             throw new AuthenticationException("El manager no está activo");
         }
