@@ -78,12 +78,9 @@ public class ComputerAssignmentService {
     }
 
     public List<ComputerAssignment> findActiveAssignments() {
-        return computerRepository.findAll().stream()
-                .filter(computer -> computer.getStatus() == ComputerStatus.ASSIGNED)
-                .map(computerAssignmentRepository::findActiveAssignmentByComputer)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
+        return computerRepository.findAll().stream().filter(computer -> computer.getStatus() == ComputerStatus.ASSIGNED)
+                .map(computerAssignmentRepository::findActiveAssignmentByComputer).filter(Optional::isPresent)
+                .map(Optional::get).toList();
     }
 
     public List<Computer> findAvailableComputers() {

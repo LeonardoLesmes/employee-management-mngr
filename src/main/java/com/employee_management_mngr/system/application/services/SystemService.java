@@ -19,7 +19,7 @@ public class SystemService {
 
     public System findSystemById(Integer id) {
         return systemRepository.findById(id)
-            .orElseThrow(() -> new SystemNotFoundException("System not found with id: " + id));
+                .orElseThrow(() -> new SystemNotFoundException("System not found with id: " + id));
     }
 
     public List<System> findAll() {

@@ -16,10 +16,7 @@ public class CredentialsService {
     private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public CredentialsService(
-        AuthRepository authRepository,
-        PasswordEncoder passwordEncoder
-    ) {
+    public CredentialsService(AuthRepository authRepository, PasswordEncoder passwordEncoder) {
         this.authRepository = authRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -47,7 +44,7 @@ public class CredentialsService {
         authRepository.save(credentials);
     }
 
-    public Credentials findByEmail(String email) {               
+    public Credentials findByEmail(String email) {
         return authRepository.findByEmployeeEmail(email)
                 .orElseThrow(() -> new AuthenticationException("User not found"));
     }

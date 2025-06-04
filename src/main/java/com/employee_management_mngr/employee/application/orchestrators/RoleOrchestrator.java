@@ -14,24 +14,24 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class RoleOrchestrator implements RoleUseCase {
-    
+
     private final RoleService roleService;
-    
+
     @Override
     public Role findById(Integer id) {
         return roleService.findById(id);
     }
-    
+
     @Override
     public List<Role> findAll() {
         return roleService.findAll();
     }
-    
+
     @Override
     public Role save(Role role) {
         return roleService.save(role);
     }
-    
+
     @Override
     public void deleteById(Integer id) {
         roleService.deleteById(id);

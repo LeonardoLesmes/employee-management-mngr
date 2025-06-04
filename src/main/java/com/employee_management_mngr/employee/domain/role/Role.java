@@ -23,7 +23,7 @@ public class Role {
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "name",  nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private RoleType type;
 
     @Column

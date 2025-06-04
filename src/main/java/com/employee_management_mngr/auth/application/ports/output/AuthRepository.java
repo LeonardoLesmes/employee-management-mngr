@@ -6,5 +6,6 @@ import com.employee_management_mngr.auth.domain.Credentials;
 
 public interface AuthRepository {
     Optional<Credentials> findByEmployeeEmail(String email);
-    Optional<Credentials> save(Credentials credentials); 
+
+    Optional<Credentials> save(Credentials credentials);
 }

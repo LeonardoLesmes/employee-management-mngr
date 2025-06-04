@@ -18,10 +18,7 @@ public class SystemController {
 
     @GetMapping
     public ResponseEntity<List<SystemDTO>> getAllSystems() {
-        List<SystemDTO> systems = systemUseCase.findAll()
-            .stream()
-            .map(SystemDTO::fromEntity)
-            .toList();
+        List<SystemDTO> systems = systemUseCase.findAll().stream().map(SystemDTO::fromEntity).toList();
         return ResponseEntity.ok(systems);
     }
 

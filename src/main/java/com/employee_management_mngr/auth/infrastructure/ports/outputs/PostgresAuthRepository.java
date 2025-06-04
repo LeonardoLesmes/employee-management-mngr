@@ -26,12 +26,12 @@ public class PostgresAuthRepository implements AuthRepository {
     public Optional<Credentials> findByEmployeeEmail(String email) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Credentials> query = cb.createQuery(Credentials.class);
-        
+
         Root<Credentials> credentials = query.from(Credentials.class);
         Join<Credentials, Employee> employee = credentials.join("employee");
-        
+
         query.where(cb.equal(employee.get("email"), email));
-        
+
         try {
             return Optional.of(em.createQuery(query).getSingleResult());
         } catch (Exception e) {

@@ -30,7 +30,7 @@ public class AccessRequest {
 
     @Column(name = "request_date")
     private LocalDateTime requestDate;
-    
+
     @Column(name = "resolution_date")
     private LocalDateTime resolutionDate;
 

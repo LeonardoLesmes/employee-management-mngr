@@ -30,4 +30,3 @@ public class PostgresSystemRepository implements SystemRepository {
         return em.createQuery(query).getResultList();
     }
 }
-

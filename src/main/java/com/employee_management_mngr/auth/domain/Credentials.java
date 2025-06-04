@@ -24,17 +24,17 @@ public class Credentials {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee employee;
-    
+
     @Column(name = "password_hash")
     private String passwordHash;
-    
+
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
-    
+
     @Column(name = "is_active")
     private Boolean isActive;
 }

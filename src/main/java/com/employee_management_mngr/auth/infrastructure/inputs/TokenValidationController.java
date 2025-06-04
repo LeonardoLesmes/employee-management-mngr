@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class TokenValidationController {
 
     private final TokenValidationUseCase tokenValidationUseCase;
-    
+
     @PostMapping("/validate-token")
     public ResponseEntity<Boolean> validateToken(@RequestBody TokenValidationRequest request) {
         boolean isValid = tokenValidationUseCase.validateToken(request.getToken());

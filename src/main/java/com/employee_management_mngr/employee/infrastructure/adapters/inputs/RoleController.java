@@ -18,16 +18,13 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/roles")
 @RequiredArgsConstructor
 public class RoleController {
-    
+
     private final RoleOrchestrator roleOrchestrator;
 
     @GetMapping
     public ResponseEntity<List<RoleDTO>> getAllRoles() {
-        List<RoleDTO> roles = roleOrchestrator.findAll()
-                .stream()
-                .filter(role -> !role.getType().isCanLogin())
-                .map(RoleDTO::fromEntity)
-                .toList();
+        List<RoleDTO> roles = roleOrchestrator.findAll().stream().filter(role -> !role.getType().isCanLogin())
+                .map(RoleDTO::fromEntity).toList();
         return ResponseEntity.ok(roles);
     }
 

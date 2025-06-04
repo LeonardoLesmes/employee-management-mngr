@@ -1,8 +1,7 @@
 package com.employee_management_mngr.computer.domain;
 
 public enum ComputerStatus {
-    AVAILABLE("AVAILABLE"),
-    ASSIGNED("ASSIGNED");
+    AVAILABLE("AVAILABLE"), ASSIGNED("ASSIGNED");
 
     private final String value;
 

@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RoleService implements RoleUseCase {
-    
+
     private final RoleRepository roleRepository;
 
     @Override

@@ -6,5 +6,6 @@ import com.employee_management_mngr.system.domain.System;
 
 public interface SystemRepository {
     Optional<System> findById(Integer id);
+
     List<System> findAll();
 }

@@ -14,18 +14,18 @@ import lombok.RequiredArgsConstructor;
 public class TokenValidationOrchestrator implements TokenValidationUseCase {
 
     private final JwtService jwtService;
-    
+
     @Override
     public boolean validateToken(String token) {
         if (token == null || token.isEmpty()) {
             return false;
         }
-        
+
         // Remove "Bearer " prefix if present
         if (token.startsWith("Bearer ")) {
             token = token.substring(7);
         }
-        
+
         return jwtService.isValidToken(token);
     }
 }

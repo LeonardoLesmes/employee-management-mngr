@@ -22,79 +22,60 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AccessRequestController {
     private final AccessRequestUseCase accessRequestUseCase;
-    
+
     @PostMapping
     public ResponseEntity<Void> createAccessRequests(@RequestBody CreateAccessRequestDTO request) {
-        accessRequestUseCase.createAccessRequests(
-            request.getEmployeeId(),
-            request.getSystemIds(),
-            request.getAssignedById()
-        );
+        accessRequestUseCase.createAccessRequests(request.getEmployeeId(), request.getSystemIds(),
+                request.getAssignedById());
         return ResponseEntity.ok().build();
     }
-    
+
     @GetMapping("/employee/{employeeId}")
-    public ResponseEntity<List<AccessRequestDTO>> getAccessRequestsByEmployeeId(
-        @PathVariable Integer employeeId,
-        @RequestParam(required = false) Integer assignedById
-    ) {
+    public ResponseEntity<List<AccessRequestDTO>> getAccessRequestsByEmployeeId(@PathVariable Integer employeeId,
+            @RequestParam(required = false) Integer assignedById) {
         List<AccessRequest> requests = accessRequestUseCase.findByEmployeeIdAndAssignedBy(employeeId, assignedById);
-        List<AccessRequestDTO> dtos = requests.stream()
-            .map(AccessRequestDTO::fromEntity)
-            .toList();
+        List<AccessRequestDTO> dtos = requests.stream().map(AccessRequestDTO::fromEntity).toList();
         return ResponseEntity.ok(dtos);
     }
-      @GetMapping("/assigned-by/{assignedById}")
-    public ResponseEntity<List<AccessRequestDTO>> getAccessRequestsByAssignedById(
-        @PathVariable Integer assignedById
-    ) {
+
+    @GetMapping("/assigned-by/{assignedById}")
+    public ResponseEntity<List<AccessRequestDTO>> getAccessRequestsByAssignedById(@PathVariable Integer assignedById) {
         List<AccessRequest> requests = accessRequestUseCase.findByAssignedById(assignedById);
-        List<AccessRequestDTO> dtos = requests.stream()
-            .map(AccessRequestDTO::fromEntity)
-            .toList();
+        List<AccessRequestDTO> dtos = requests.stream().map(AccessRequestDTO::fromEntity).toList();
         return ResponseEntity.ok(dtos);
     }
-    
+
     @GetMapping("/range")
-    public ResponseEntity<List<AccessRequestDTO>> getAccessRequestsByIdRange(
-        @RequestParam Integer startId,
-        @RequestParam Integer endId,
-        @RequestParam(required = false) Integer assignedById
-    ) {
+    public ResponseEntity<List<AccessRequestDTO>> getAccessRequestsByIdRange(@RequestParam Integer startId,
+            @RequestParam Integer endId, @RequestParam(required = false) Integer assignedById) {
         List<AccessRequest> requests;
-        
+
         if (assignedById == null) {
             requests = accessRequestUseCase.findByIdRange(startId, endId);
         } else {
             requests = accessRequestUseCase.findByIdRangeAndAssignedBy(startId, endId, assignedById);
         }
-        
-        List<AccessRequestDTO> dtos = requests.stream()
-            .map(AccessRequestDTO::fromEntity)
-            .toList();
-            
+
+        List<AccessRequestDTO> dtos = requests.stream().map(AccessRequestDTO::fromEntity).toList();
+
         return ResponseEntity.ok(dtos);
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<AccessRequestDTO> updateAccessRequestStatus(
-        @PathVariable Integer id,
-        @RequestBody UpdateAccessRequestStatusDTO request
-    ) {
+    public ResponseEntity<AccessRequestDTO> updateAccessRequestStatus(@PathVariable Integer id,
+            @RequestBody UpdateAccessRequestStatusDTO request) {
         AccessRequest updatedRequest = accessRequestUseCase.updateAccessRequestStatus(id, request.getStatus());
         return ResponseEntity.ok(AccessRequestDTO.fromEntity(updatedRequest));
     }
 
     @ExceptionHandler(EmployeeNotFoundException.class)
     public ResponseEntity<String> handleEmployeeNotFound(EmployeeNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body("Employee not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee not found");
     }
 
     @ExceptionHandler(SystemNotFoundException.class)
     public ResponseEntity<String> handleSystemNotFound(SystemNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body("System not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("System not found");
     }
 
     @ExceptionHandler(AccessRequestCreationException.class)

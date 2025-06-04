@@ -23,18 +23,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
-  
+
     private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
 
     public Employee createEmployee(Employee employee) {
         try {
             validateRequiredFields(employee);
-            setDefaultValues(employee);        
+            setDefaultValues(employee);
             return employeeRepository.save(employee);
         } catch (RequiredFieldMissingException e) {
             throw new InvalidEmployeeRequest(e.getMessage());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Error creating employee: {}", e.getMessage(), e);
             throw new ErrorCreationEmployee(e.getMessage());
         }
@@ -65,56 +64,59 @@ public class EmployeeService {
         if (employee.getRoleAssignedAt() == null) {
             employee.setRoleAssignedAt(LocalDateTime.now());
         }
-    }    
+    }
 
     public Employee findEmployeeById(Integer id) {
         return employeeRepository.findById(id)
-            .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with id: " + id));
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with id: " + id));
     }
 
     public Employee findEmployeeByEmail(String email) {
         return employeeRepository.findByEmail(email)
-            .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with email: " + email));
-    }    public Employee updateEmployeeStatus(Integer employeeId, EmployeeStatus newStatus) {
-        Employee employee = findEmployeeById(employeeId);        
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with email: " + email));
+    }
+
+    public Employee updateEmployeeStatus(Integer employeeId, EmployeeStatus newStatus) {
+        Employee employee = findEmployeeById(employeeId);
         if (newStatus == null) {
             throw new InvalidEmployeeRequest("Status cannot be null");
-        }        
+        }
         employee.setStatus(newStatus);
         return employeeRepository.save(employee);
     }
-      public List<Employee> findEmployeesByAssignedBy(Integer assignedBy) {
+
+    public List<Employee> findEmployeesByAssignedBy(Integer assignedBy) {
         if (assignedBy == null) {
             throw new InvalidEmployeeRequest("AssignedBy ID cannot be null");
         }
         return employeeRepository.findByAssignedBy(assignedBy);
     }
-    
+
     public List<Employee> findEmployeesByIdRange(Integer startId, Integer endId) {
         if (startId == null || endId == null) {
             throw new InvalidEmployeeRequest("Start ID and End ID cannot be null");
         }
-        
+
         if (startId > endId) {
             throw new InvalidEmployeeRequest("Start ID cannot be greater than End ID");
         }
-        
+
         return employeeRepository.findByIdRange(startId, endId);
     }
-    
+
     public List<Employee> findEmployeesByIdRangeAndAssignedBy(Integer startId, Integer endId, Integer assignedById) {
         if (startId == null || endId == null) {
             throw new InvalidEmployeeRequest("Start ID and End ID cannot be null");
         }
-        
+
         if (startId > endId) {
             throw new InvalidEmployeeRequest("Start ID cannot be greater than End ID");
         }
-        
+
         if (assignedById == null) {
             return findEmployeesByIdRange(startId, endId);
         }
-        
+
         return employeeRepository.findByIdRangeAndAssignedBy(startId, endId, assignedById);
     }
 }

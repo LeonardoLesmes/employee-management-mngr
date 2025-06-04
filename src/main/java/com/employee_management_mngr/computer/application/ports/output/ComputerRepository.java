@@ -6,7 +6,10 @@ import com.employee_management_mngr.computer.domain.Computer;
 
 public interface ComputerRepository {
     Computer save(Computer computer);
+
     Optional<Computer> findById(Integer id);
+
     List<Computer> findAll();
+
     List<Computer> findAvailableComputers();
 }

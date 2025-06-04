@@ -4,10 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum EmployeeStatus {
-    PENDING("pending"),
-    APPROVED("approved"),
-    REJECTED("rejected"),
-    CANCELED("cancelled");
+    PENDING("pending"), APPROVED("approved"), REJECTED("rejected"), CANCELED("cancelled");
 
     private final String value;
 

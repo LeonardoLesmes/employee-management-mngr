@@ -22,11 +22,8 @@ public class AuthOrchestrator implements AuthUseCase {
     private final EmployeeUseCase employeeUseCase;
     private final JwtService jwtService;
 
-    public AuthOrchestrator(
-        CredentialsService credentialsService,
-        EmployeeUseCase employeeUseCase,
-        JwtService jwtService
-    ) {
+    public AuthOrchestrator(CredentialsService credentialsService, EmployeeUseCase employeeUseCase,
+            JwtService jwtService) {
         this.credentialsService = credentialsService;
         this.employeeUseCase = employeeUseCase;
         this.jwtService = jwtService;
@@ -38,21 +35,17 @@ public class AuthOrchestrator implements AuthUseCase {
         Role role = employee.getRole();
         if (!employee.getRole().getType().isCanLogin()) {
             throw new AuthenticationException("User with role " + role.getType().getName() + " cannot login.");
-        }        
+        }
         credentialsService.isValidCredentials(request.getEmail(), request.getPassword());
 
         String token = jwtService.generateToken(employee.getId(), role.getType().getName());
 
-        return AuthResponse.builder()
-            .id(employee.getId())
-            .name(employee.getName())
-            .role(employee.getRole().getType().getName())
-            .token(token)
-            .build();        
+        return AuthResponse.builder().id(employee.getId()).name(employee.getName())
+                .role(employee.getRole().getType().getName()).token(token).build();
     }
 
     @Override
     public void createPassword(AuthRequest request) {
-        credentialsService.createPassword(request);        
+        credentialsService.createPassword(request);
     }
 }

@@ -34,16 +34,16 @@ public class Employee {
     private String email;
 
     @Column(nullable = false)
-    private String department;    
-    
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)    
+    private String department;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EmployeeStatus status;
-    
+
     @Column(name = "assigned_by", nullable = false)
     private Integer assignedBy;
 
