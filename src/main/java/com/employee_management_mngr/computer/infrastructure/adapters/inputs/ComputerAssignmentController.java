@@ -14,6 +14,7 @@ import com.employee_management_mngr.computer.domain.ComputerAssignmentStatus;
 import com.employee_management_mngr.computer.infrastructure.adapters.inputs.dto.ComputerAssignmentDTO;
 import com.employee_management_mngr.computer.infrastructure.adapters.inputs.dto.ComputerDTO;
 import com.employee_management_mngr.computer.infrastructure.adapters.inputs.dto.CreateComputerAssignmentDTO;
+import com.employee_management_mngr.computer.infrastructure.adapters.inputs.dto.UpdateComputerAssignmentStatusDto;
 import com.employee_management_mngr.employee.application.exceptions.EmployeeNotApprovedException;
 
 import lombok.RequiredArgsConstructor;
@@ -31,11 +32,11 @@ public class ComputerAssignmentController {
         return ResponseEntity.ok(ComputerAssignmentDTO.fromEntity(assignment));
     }
 
-    @PutMapping("/{id}/status/{status}")
-    public ResponseEntity<ComputerAssignmentDTO> updateAssignmentStatus(@PathVariable Integer id,
-            @PathVariable ComputerAssignmentStatus status) {
-        ComputerAssignment assignment = computerAssignmentUseCase.updateAssignmentStatus(id, status);
-        return ResponseEntity.ok(ComputerAssignmentDTO.fromEntity(assignment));
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Void> updateAssignmentStatus(@PathVariable Integer id,
+            @RequestBody UpdateComputerAssignmentStatusDto status) {
+        computerAssignmentUseCase.updateAssignmentStatus(id, ComputerAssignmentStatus.valueOf(status.getStatus().name()));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @GetMapping("/employee/{employeeId}")
