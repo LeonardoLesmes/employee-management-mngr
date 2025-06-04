@@ -40,3 +40,4 @@ employees
 database.sql
 access-relations.txt
 create-all-tables.sql
+.env

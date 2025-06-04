@@ -21,10 +21,4 @@ public class SystemController {
         List<SystemDTO> systems = systemUseCase.findAll().stream().map(SystemDTO::fromEntity).toList();
         return ResponseEntity.ok(systems);
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<SystemDTO> getSystemById(@PathVariable Integer id) {
-        SystemDTO system = SystemDTO.fromEntity(systemUseCase.findSystemById(id));
-        return ResponseEntity.ok(system);
-    }
 }
