@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.employee_management_mngr.access.application.exceptions.AccessRequestCreationException;
+import com.employee_management_mngr.access.application.exceptions.AlreadyExistAccessRequest;
 import com.employee_management_mngr.access.application.ports.input.SystemUseCase;
 import com.employee_management_mngr.access.application.ports.output.AccessRequestRepository;
 import com.employee_management_mngr.access.domain.AccessRequest;
@@ -37,27 +38,19 @@ public class AccessRequestService {
             if (existingRequest.isPresent()) {
                 AccessRequestStatus status = existingRequest.get().getStatus();
                 if (status != AccessRequestStatus.CANCELLED && status != AccessRequestStatus.REJECTED) {
-                    throw new AccessRequestCreationException("Access request already exists for employee " + employeeId
+                    throw new AlreadyExistAccessRequest("Access request already exists for employee " + employeeId
                             + " and system " + systemId + " with status " + status);
                 }
             }
 
-            AccessRequest accessRequest = new AccessRequest();            accessRequest.setEmployee(employee);
+            AccessRequest accessRequest = new AccessRequest();            
+            accessRequest.setEmployee(employee);
             accessRequest.setSystem(system);
             accessRequest.setStatus(AccessRequestStatus.PENDING);
-            // No es necesario setear requestDate manualmente, se establece con @PrePersist
             accessRequest.setAssignedBy(assignedById);
 
             return accessRequestRepository.save(accessRequest);
         }).toList();
-    }
-
-    public List<AccessRequest> findByEmployeeIdAndAssignedBy(Integer employeeId, Integer assignedById) {
-        List<AccessRequest> requests = findByEmployeeId(employeeId);
-        if (assignedById == null) {
-            return requests;
-        }
-        return requests.stream().filter(request -> request.getAssignedBy().equals(assignedById)).toList();
     }
 
     public List<AccessRequest> findByEmployeeId(Integer employeeId) {
@@ -86,34 +79,5 @@ public class AccessRequestService {
         }
 
         return accessRequestRepository.save(accessRequest);
-    }
-
-    public List<AccessRequest> findByIdRange(Integer startId, Integer endId) {
-        if (startId == null || endId == null) {
-            throw new AccessRequestCreationException("Start ID and End ID cannot be null");
-        }
-
-        if (startId > endId) {
-            throw new AccessRequestCreationException("Start ID cannot be greater than End ID");
-        }
-
-        return accessRequestRepository.findByIdRange(startId, endId);
-    }
-
-    public List<AccessRequest> findByIdRangeAndAssignedBy(Integer startId, Integer endId, Integer assignedById) {
-        if (startId == null || endId == null) {
-            throw new AccessRequestCreationException("Start ID and End ID cannot be null");
-        }
-
-        if (startId > endId) {
-            throw new AccessRequestCreationException("Start ID cannot be greater than End ID");
-        }
-
-        if (assignedById == null) {
-            return findByIdRange(startId, endId);
-        }
-
-        Employee assignedBy = employeeUseCase.findEmployeeById(assignedById);
-        return accessRequestRepository.findByIdRangeAndAssignedBy(startId, endId, assignedBy);
     }
 }

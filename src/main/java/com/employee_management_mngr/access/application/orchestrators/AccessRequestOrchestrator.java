@@ -33,11 +33,6 @@ public class AccessRequestOrchestrator implements AccessRequestUseCase {
     }
 
     @Override
-    public List<AccessRequest> findByEmployeeIdAndAssignedBy(Integer employeeId, Integer assignedById) {
-        return accessRequestService.findByEmployeeIdAndAssignedBy(employeeId, assignedById);
-    }
-
-    @Override
     public List<AccessRequest> findByAssignedById(Integer assignedById) {
         try {
             return accessRequestService.findByAssignedById(assignedById);
@@ -51,27 +46,5 @@ public class AccessRequestOrchestrator implements AccessRequestUseCase {
     @Override
     public AccessRequest updateAccessRequestStatus(Integer requestId, AccessRequestStatus newStatus) {
         return accessRequestService.updateAccessRequestStatus(requestId, newStatus);
-    }
-
-    @Override
-    public List<AccessRequest> findByIdRange(Integer startId, Integer endId) {
-        try {
-            return accessRequestService.findByIdRange(startId, endId);
-        } catch (Exception e) {
-            logger.error("Error finding access requests by ID range {} to {}: {}", startId, endId, e.getMessage(), e);
-            throw new AccessRequestCreationException("Error finding access requests by ID range: " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public List<AccessRequest> findByIdRangeAndAssignedBy(Integer startId, Integer endId, Integer assignedById) {
-        try {
-            return accessRequestService.findByIdRangeAndAssignedBy(startId, endId, assignedById);
-        } catch (Exception e) {
-            logger.error("Error finding access requests by ID range {} to {} and assignedBy ID {}: {}", startId, endId,
-                    assignedById, e.getMessage(), e);
-            throw new AccessRequestCreationException(
-                    "Error finding access requests by ID range and assignedBy: " + e.getMessage(), e);
-        }
     }
 }
