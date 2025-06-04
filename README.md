@@ -10,7 +10,9 @@ Una aplicación integral de Spring Boot para gestionar empleados, solicitudes de
 - [Prerrequisitos](#prerrequisitos)
 - [Instalación y Configuración](#instalación-y-configuración)
 - [Documentación de la API](#documentación-de-la-api)
+- [Mapa de Permisos de Roles](#mapa-de-permisos-de-roles)
 - [Esquema de Base de Datos](#esquema-de-base-de-datos)
+- [Campos Automáticos de Fecha](#campos-automáticos-de-fecha)
 - [Formateo de Código](#formateo-de-código)
 - [Seguridad](#seguridad)
 - [Manejo de Errores](#manejo-de-errores)
@@ -94,10 +96,6 @@ src/main/java/com/employee_management_mngr/
 │   ├── application/
 │   ├── domain/
 │   └── infrastructure/
-├── system/                        # Gestión de sistemas
-│   ├── application/
-│   ├── domain/
-│   └── infrastructure/
 └── EmployeeManagementApplication.java  # Clase principal de la aplicación
 ```
 
@@ -150,16 +148,29 @@ git clone <repository-url>
 cd employee-management-mngr
 ```
 
-### 2. Configuración de Base de Datos
-Crear una base de datos PostgreSQL y actualizar `application.properties`:
+### 2. Configuración de Variables de Entorno
+El proyecto utiliza un archivo `.env` para la configuración. Se proporciona un archivo `.env.example` como plantilla:
 
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/employee_management
-spring.datasource.username=your_username
-spring.datasource.password=your_password
-spring.jpa.hibernate.ddl-auto=update
+1. **Copia el archivo de ejemplo**:
+```bash
+copy .env.example .env
 ```
 
+2. **Edita el archivo `.env`** con tu configuración:
+```
+# Database Configuration
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/employee_management_db
+SPRING_DATASOURCE_USERNAME=postgres
+SPRING_DATASOURCE_PASSWORD=your_database_password
+
+# JPA/Hibernate Configuration
+SPRING_JPA_HIBERNATE_DDL_AUTO=update
+SPRING_JPA_SHOW_SQL=false
+
+# JWT Configuration
+JWT_SECRET=your_jwt_secret_key_here_base64_encoded
+JWT_EXPIRATION=60
+```
 ### 3. Construir la Aplicación
 ```bash
 mvn clean install
@@ -192,9 +203,9 @@ curl -X POST "http://localhost:8080/api/auth/login" \
 }'
 ```
 
-#### Crear Contraseña
+#### Establecer Contraseña
 ```bash
-curl -X POST "http://localhost:8080/api/auth/create-password" \
+curl -X POST "http://localhost:8080/api/auth/set-password" \
 -H "Content-Type: application/json" \
 -d '{
     "email": "user@example.com",
@@ -239,21 +250,14 @@ curl -X GET "http://localhost:8080/api/employees/assigned-by/1" \
 -H "Authorization: Bearer your-jwt-token"
 ```
 
-#### Obtener Empleados por Rango de IDs
-```bash
-# Sin filtro de asignador
-curl -X GET "http://localhost:8080/api/employees/range?startId=1&endId=10" \
--H "Authorization: Bearer your-jwt-token"
-
-# Con filtro de asignador
-curl -X GET "http://localhost:8080/api/employees/range?startId=1&endId=10&assignedById=2" \
--H "Authorization: Bearer your-jwt-token"
-```
-
 #### Actualizar Estado de Empleado
 ```bash
-curl -X PUT "http://localhost:8080/api/employees/1/status/ACTIVE" \
--H "Authorization: Bearer your-jwt-token"
+curl -X PUT "http://localhost:8080/api/employees/1/status" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer your-jwt-token" \
+-d '{
+    "status": "APPROVED"
+}'
 ```
 
 ### Gestión de Solicitudes de Acceso
@@ -287,17 +291,6 @@ curl -X GET "http://localhost:8080/api/access-requests/assigned-by/1" \
 -H "Authorization: Bearer your-jwt-token"
 ```
 
-#### Obtener Solicitudes de Acceso por Rango de IDs
-```bash
-# Sin filtro de asignador
-curl -X GET "http://localhost:8080/api/access-requests/range?startId=1&endId=20" \
--H "Authorization: Bearer your-jwt-token"
-
-# Con filtro de asignador
-curl -X GET "http://localhost:8080/api/access-requests/range?startId=1&endId=20&assignedById=2" \
--H "Authorization: Bearer your-jwt-token"
-```
-
 #### Actualizar Estado de Solicitud de Acceso
 ```bash
 curl -X PUT "http://localhost:8080/api/access-requests/1/status" \
@@ -324,8 +317,12 @@ curl -X POST "http://localhost:8080/api/computer-assignments" \
 
 #### Actualizar Estado de Asignación de Computadora
 ```bash
-curl -X PUT "http://localhost:8080/api/computer-assignments/1/status/APPROVED" \
--H "Authorization: Bearer your-jwt-token"
+curl -X PUT "http://localhost:8080/api/computer-assignments/1/status" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer your-jwt-token" \
+-d '{
+    "status": "APPROVED"
+}'
 ```
 
 #### Obtener Asignaciones de Computadoras por Empleado
@@ -337,23 +334,6 @@ curl -X GET "http://localhost:8080/api/computer-assignments/employee/1" \
 #### Obtener Asignaciones de Computadoras por ID del Asignador
 ```bash
 curl -X GET "http://localhost:8080/api/computer-assignments/assigned-by/1" \
--H "Authorization: Bearer your-jwt-token"
-```
-
-#### Obtener Asignaciones de Computadoras por Rango de IDs
-```bash
-# Sin filtro de asignador
-curl -X GET "http://localhost:8080/api/computer-assignments/range?startId=1&endId=15" \
--H "Authorization: Bearer your-jwt-token"
-
-# Con filtro de asignador
-curl -X GET "http://localhost:8080/api/computer-assignments/range?startId=1&endId=15&assignedById=2" \
--H "Authorization: Bearer your-jwt-token"
-```
-
-#### Obtener Asignaciones de Computadoras Activas
-```bash
-curl -X GET "http://localhost:8080/api/computer-assignments/active" \
 -H "Authorization: Bearer your-jwt-token"
 ```
 
@@ -385,9 +365,52 @@ curl -X GET "http://localhost:8080/api/systems" \
 -H "Authorization: Bearer your-jwt-token"
 ```
 
-#### Obtener Sistema por ID
+#### Obtener Sistemas Disponibles para un Rol
 ```bash
-curl -X GET "http://localhost:8080/api/systems/1" \
+curl -X GET "http://localhost:8080/api/systems/available/23" \
+-H "Authorization: Bearer your-jwt-token"
+```
+
+### Mapa de Permisos de Roles
+
+La aplicación implementa un sistema de validación de permisos basado en roles que determina qué sistemas pueden ser accedidos por cada rol. Esto se gestiona a través del componente `RolePermissionMap`.
+
+#### Características del Mapa de Permisos
+
+- Cada rol tiene asignado un conjunto específico de sistemas a los que puede acceder
+- Las solicitudes de acceso se validan contra este mapa para prevenir accesos no autorizados
+- El sistema rechaza automáticamente las solicitudes para sistemas no permitidos para el rol del empleado
+
+#### Ejemplo de Asignaciones
+
+```
+DEV_JUNIOR (ID: 23) - Acceso a sistemas: 2, 3, 5, 7, 9
+DEV_SEMI (ID: 24) - Acceso a sistemas: 2, 3, 5, 7, 9
+```
+
+#### Validación de Permisos
+
+La validación ocurre automáticamente cuando:
+- Se crea una solicitud de acceso a un sistema
+- Un empleado intenta acceder a un sistema no autorizado para su rol
+
+#### Endpoints de Permisos de Roles
+
+##### Obtener todos los mapas de permisos
+```bash
+curl -X GET "http://localhost:8080/api/role-permissions" \
+-H "Authorization: Bearer your-jwt-token"
+```
+
+##### Obtener permisos para un rol específico
+```bash
+curl -X GET "http://localhost:8080/api/role-permissions/23" \
+-H "Authorization: Bearer your-jwt-token"
+```
+
+##### Verificar permiso específico
+```bash
+curl -X GET "http://localhost:8080/api/role-permissions/check/23/5" \
 -H "Authorization: Bearer your-jwt-token"
 ```
 
@@ -407,7 +430,8 @@ curl -X GET "http://localhost:8080/api/systems/1" \
 
 #### Estado de Empleado
 - `PENDING`: Recién creado, esperando activación
-- `ACTIVE`: Empleado activo
+- `APPROVED`: Empleado aprobado y activo
+- `REJECTED`: Empleado rechazado
 - `INACTIVE`: Empleado inactivo
 
 #### Estado de Solicitud de Acceso
@@ -517,6 +541,26 @@ public class ComputerAssignmentException extends RuntimeException {
 }
 ```
 
+#### EmployeeNotApprovedException
+```java
+@ResponseStatus(HttpStatus.CONFLICT)
+public class EmployeeNotApprovedException extends RuntimeException {
+    public EmployeeNotApprovedException(Integer employeeId) {
+        super("El empleado con ID " + employeeId + " no está aprobado");
+    }
+}
+```
+
+#### UnauthorizedSystemAccessException
+```java
+@ResponseStatus(HttpStatus.CONFLICT)
+public class UnauthorizedSystemAccessException extends RuntimeException {
+    public UnauthorizedSystemAccessException(Integer roleId, Integer systemId) {
+        super("El rol " + roleId + " no tiene permiso para acceder al sistema " + systemId);
+    }
+}
+```
+
 ### Respuestas de Error Estándar
 
 Todas las respuestas de error siguen un formato consistente:
@@ -548,60 +592,22 @@ Todas las respuestas de error siguen un formato consistente:
 - Validación de existencia de entidades relacionadas
 - Validación de estados válidos para transiciones
 
-## 🤝 Contribuir
+## Campos Automáticos de Fecha
 
-### Directrices de Desarrollo
+Todas las entidades principales incluyen un campo `created_at` que se genera automáticamente al crear nuevos registros:
 
-1. **Fork** el repositorio
-2. **Crear** una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. **Formatear** el código (`mvn formatter:format`)
-4. **Commit** tus cambios (`git commit -m 'Add some AmazingFeature'`)
-5. **Push** a la rama (`git push origin feature/AmazingFeature`)
-6. **Abrir** un Pull Request
+### @PrePersist
 
-### Estándares de Código
+Todas las entidades utilizan el método `@PrePersist` para inicializar automáticamente los campos de fecha al momento de la creación:
 
-- Seguir la arquitectura hexagonal establecida
-- Escribir pruebas unitarias para nuevas funcionalidades
-- Mantener la cobertura de código por encima del 80%
-- Usar nombres descriptivos para variables y métodos
-- Documentar nuevos endpoints en este README
+```java
+@Column(name = "created_at", updatable = false)
+private LocalDateTime createdAt;
 
-### Convenciones de Commit
-
-Usar el formato de [Conventional Commits](https://www.conventionalcommits.org/):
-
-```
-<tipo>[alcance opcional]: <descripción>
-
-[cuerpo opcional]
-
-[pie opcional]
+@PrePersist
+protected void onCreate() {
+    createdAt = LocalDateTime.now();
+}
 ```
 
-Ejemplos:
-- `feat(employee): add employee filtering by department`
-- `fix(auth): resolve JWT token expiration issue`
-- `docs(readme): update API documentation`
-
-### Estructura de Pull Request
-
-- Título descriptivo
-- Descripción clara de los cambios
-- Lista de cambios realizados
-- Capturas de pantalla si aplica
-- Referencias a issues relacionados
-
-### Configuración del Entorno de Desarrollo
-
-1. Instalar Java 21
-2. Instalar Maven 3.6+
-3. Instalar PostgreSQL
-4. Configurar IDE con formato automático
-5. Ejecutar `mvn formatter:format` antes de commits
-
----
-
-**¡Gracias por contribuir al Sistema de Gestión de Empleados!** 🎉
-
-Para preguntas o soporte, por favor abre un issue en el repositorio.
+Esta característica asegura la consistencia en las marcas de tiempo y elimina la necesidad de establecer estas fechas manualmente en los servicios.
