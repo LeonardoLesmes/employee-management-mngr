@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.employee_management_mngr.access.application.exceptions.AccessRequestCreationException;
 import com.employee_management_mngr.access.application.exceptions.AlreadyExistAccessRequest;
+import com.employee_management_mngr.access.application.exceptions.EmployeeNotApprovedException;
 import com.employee_management_mngr.access.application.exceptions.SystemNotFoundException;
 import com.employee_management_mngr.access.application.ports.input.AccessRequestUseCase;
 import com.employee_management_mngr.access.domain.AccessRequest;
@@ -50,6 +51,11 @@ public class AccessRequestController {
             @RequestBody UpdateAccessRequestStatusDTO request) {
         accessRequestUseCase.updateAccessRequestStatus(id, request.getStatus());
         return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(EmployeeNotApprovedException.class)
+    public ResponseEntity<String> handleEmployeeNotApproved(EmployeeNotApprovedException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
     @ExceptionHandler(EmployeeNotFoundException.class)
