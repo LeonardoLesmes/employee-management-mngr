@@ -3,12 +3,15 @@ package com.employee_management_mngr.access.application.services;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.employee_management_mngr.access.application.exceptions.AccessRequestCreationException;
 import com.employee_management_mngr.access.application.exceptions.AlreadyExistAccessRequest;
+import com.employee_management_mngr.access.application.exceptions.UnauthorizedSystemAccessException;
+import com.employee_management_mngr.access.application.mappers.RolePermissionMap;
 import com.employee_management_mngr.access.application.ports.input.SystemUseCase;
 import com.employee_management_mngr.access.application.ports.output.AccessRequestRepository;
 import com.employee_management_mngr.access.domain.AccessRequest;
@@ -35,6 +38,8 @@ public class AccessRequestService {
         if (employee.getStatus() != EmployeeStatus.APPROVED) {
             throw new EmployeeNotApprovedException(employeeId.toString());
         }
+
+        validateSystemPermissions(employee.getRole().getId(), systemIds);
 
         return systemIds.stream().map(systemId -> {
             System system = systemUseCase.findSystemById(systemId);
@@ -85,5 +90,16 @@ public class AccessRequestService {
         }
 
         return accessRequestRepository.save(accessRequest);
+    }
+
+    private void validateSystemPermissions(Integer roleId, List<Integer> requestedSystemIds) {
+        List<Integer> allowedSystemIds = RolePermissionMap.getAllowedSystemIds(roleId);
+        List<Integer> unauthorizedSystems = requestedSystemIds.stream()
+            .filter(systemId -> !allowedSystemIds.contains(systemId))
+            .collect(Collectors.toList());
+
+        if (!unauthorizedSystems.isEmpty()) {
+            throw new UnauthorizedSystemAccessException("Role " + roleId + " is not authorized for systems: " + unauthorizedSystems);
+        }
     }
 }

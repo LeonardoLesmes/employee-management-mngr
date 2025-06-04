@@ -8,4 +8,6 @@ public interface SystemUseCase {
     System findSystemById(Integer id);
 
     List<System> findAll();
+
+    List<Integer> getSystemsAllowedToRole(Integer roleId);
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.employee_management_mngr.access.application.exceptions.AccessRequestCreationException;
 import com.employee_management_mngr.access.application.exceptions.AlreadyExistAccessRequest;
 import com.employee_management_mngr.access.application.exceptions.SystemNotFoundException;
+import com.employee_management_mngr.access.application.exceptions.UnauthorizedSystemAccessException;
 import com.employee_management_mngr.access.application.ports.input.AccessRequestUseCase;
 import com.employee_management_mngr.access.domain.AccessRequest;
 import com.employee_management_mngr.access.infrastructure.adapters.inputs.dto.AccessRequestDTO;
@@ -76,5 +77,10 @@ public class AccessRequestController {
     @ExceptionHandler(AlreadyExistAccessRequest.class)
     public ResponseEntity<String> handleAlreadyExistAccessRequest(AlreadyExistAccessRequest e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+
+    @ExceptionHandler(UnauthorizedSystemAccessException.class)
+    public ResponseEntity<String> handleUnauthorizedSystemAccess(UnauthorizedSystemAccessException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 }

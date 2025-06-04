@@ -25,4 +25,9 @@ public class SystemOrchestrator implements SystemUseCase {
     public List<System> findAll() {
         return systemService.findAll();
     }
+
+    @Override
+    public List<Integer> getSystemsAllowedToRole(Integer roleId) {
+        return systemService.getSystemsAllowedToRole(roleId);
+    }
 }
