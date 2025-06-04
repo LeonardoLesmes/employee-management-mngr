@@ -78,32 +78,4 @@ public class PostgresEmployeeRepository implements EmployeeRepository {
 
         return em.createQuery(query).getResultList();
     }
-
-    @Override
-    public List<Employee> findByIdRange(Integer startId, Integer endId) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Employee> query = cb.createQuery(Employee.class);
-
-        Root<Employee> employee = query.from(Employee.class);
-        employee.fetch("role", JoinType.LEFT);
-
-        query.where(cb.and(cb.greaterThanOrEqualTo(employee.get("id"), startId),
-                cb.lessThanOrEqualTo(employee.get("id"), endId)));
-
-        return em.createQuery(query).getResultList();
-    }
-
-    @Override
-    public List<Employee> findByIdRangeAndAssignedBy(Integer startId, Integer endId, Integer assignedBy) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Employee> query = cb.createQuery(Employee.class);
-
-        Root<Employee> employee = query.from(Employee.class);
-        employee.fetch("role", JoinType.LEFT);
-
-        query.where(cb.and(cb.greaterThanOrEqualTo(employee.get("id"), startId),
-                cb.lessThanOrEqualTo(employee.get("id"), endId), cb.equal(employee.get("assignedBy"), assignedBy)));
-
-        return em.createQuery(query).getResultList();
-    }
 }

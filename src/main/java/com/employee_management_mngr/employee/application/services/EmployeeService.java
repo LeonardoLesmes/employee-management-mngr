@@ -1,6 +1,5 @@
 package com.employee_management_mngr.employee.application.services;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -80,33 +79,5 @@ public class EmployeeService {
             throw new InvalidEmployeeRequest("AssignedBy ID cannot be null");
         }
         return employeeRepository.findByAssignedBy(assignedBy);
-    }
-
-    public List<Employee> findEmployeesByIdRange(Integer startId, Integer endId) {
-        if (startId == null || endId == null) {
-            throw new InvalidEmployeeRequest("Start ID and End ID cannot be null");
-        }
-
-        if (startId > endId) {
-            throw new InvalidEmployeeRequest("Start ID cannot be greater than End ID");
-        }
-
-        return employeeRepository.findByIdRange(startId, endId);
-    }
-
-    public List<Employee> findEmployeesByIdRangeAndAssignedBy(Integer startId, Integer endId, Integer assignedById) {
-        if (startId == null || endId == null) {
-            throw new InvalidEmployeeRequest("Start ID and End ID cannot be null");
-        }
-
-        if (startId > endId) {
-            throw new InvalidEmployeeRequest("Start ID cannot be greater than End ID");
-        }
-
-        if (assignedById == null) {
-            return findEmployeesByIdRange(startId, endId);
-        }
-
-        return employeeRepository.findByIdRangeAndAssignedBy(startId, endId, assignedById);
     }
 }
