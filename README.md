@@ -1,4 +1,4 @@
-# Sistema de Gestión de Empleados
+# Sistema de Gestión de Empleados - Backend
 
 Una aplicación integral de Spring Boot para gestionar empleados, solicitudes de acceso a sistemas y asignaciones de computadoras en una organización. El sistema implementa principios de arquitectura hexagonal y proporciona APIs RESTful para todas las operaciones.
 
