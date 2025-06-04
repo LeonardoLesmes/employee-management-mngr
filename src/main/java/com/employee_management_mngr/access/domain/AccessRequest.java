@@ -2,7 +2,7 @@ package com.employee_management_mngr.access.domain;
 
 import java.time.LocalDateTime;
 import com.employee_management_mngr.employee.domain.employee.Employee;
-import com.employee_management_mngr.system.domain.System;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

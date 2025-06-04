@@ -38,7 +38,6 @@ public class PostgresComputerRepository implements ComputerRepository {
     public List<Computer> findAll() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Computer> query = cb.createQuery(Computer.class);
-        Root<Computer> root = query.from(Computer.class);
         return em.createQuery(query).getResultList();
     }
 

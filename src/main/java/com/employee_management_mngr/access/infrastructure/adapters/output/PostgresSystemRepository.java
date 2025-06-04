@@ -1,10 +1,12 @@
-package com.employee_management_mngr.system.infrastructure.adapters.output;
+package com.employee_management_mngr.access.infrastructure.adapters.output;
 
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
-import com.employee_management_mngr.system.application.ports.output.SystemRepository;
-import com.employee_management_mngr.system.domain.System;
+
+import com.employee_management_mngr.access.application.ports.output.SystemRepository;
+import com.employee_management_mngr.access.domain.System;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;

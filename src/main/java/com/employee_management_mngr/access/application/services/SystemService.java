@@ -1,11 +1,11 @@
-package com.employee_management_mngr.system.application.services;
+package com.employee_management_mngr.access.application.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.employee_management_mngr.system.application.ports.output.SystemRepository;
-import com.employee_management_mngr.system.domain.System;
-import com.employee_management_mngr.system.application.exceptions.SystemNotFoundException;
+import com.employee_management_mngr.access.application.exceptions.SystemNotFoundException;
+import com.employee_management_mngr.access.application.ports.output.SystemRepository;
+import com.employee_management_mngr.access.domain.System;
 
 import lombok.RequiredArgsConstructor;
 

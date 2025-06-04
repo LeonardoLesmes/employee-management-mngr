@@ -1,4 +1,4 @@
-package com.employee_management_mngr.system.domain;
+package com.employee_management_mngr.access.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

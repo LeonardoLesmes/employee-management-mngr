@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import com.employee_management_mngr.access.application.ports.output.AccessRequestRepository;
 import com.employee_management_mngr.access.domain.AccessRequest;
+import com.employee_management_mngr.access.domain.System;
 import com.employee_management_mngr.employee.domain.employee.Employee;
-import com.employee_management_mngr.system.domain.System;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;

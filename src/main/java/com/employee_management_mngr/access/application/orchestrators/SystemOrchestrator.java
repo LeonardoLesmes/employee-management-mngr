@@ -1,12 +1,12 @@
-package com.employee_management_mngr.system.application.orchestrators;
+package com.employee_management_mngr.access.application.orchestrators;
 
 import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.employee_management_mngr.system.application.ports.input.SystemUseCase;
-import com.employee_management_mngr.system.application.services.SystemService;
-import com.employee_management_mngr.system.domain.System;
+import com.employee_management_mngr.access.application.ports.input.SystemUseCase;
+import com.employee_management_mngr.access.application.services.SystemService;
+import com.employee_management_mngr.access.domain.System;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,6 +1,7 @@
-package com.employee_management_mngr.system.infrastructure.inputs.dto;
+package com.employee_management_mngr.access.infrastructure.inputs.dto;
 
-import com.employee_management_mngr.system.domain.System;
+import com.employee_management_mngr.access.domain.System;
+
 import lombok.Getter;
 import lombok.Setter;
 

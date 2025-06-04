@@ -1,7 +1,8 @@
-package com.employee_management_mngr.system.application.ports.input;
+package com.employee_management_mngr.access.application.ports.input;
 
 import java.util.List;
-import com.employee_management_mngr.system.domain.System;
+
+import com.employee_management_mngr.access.domain.System;
 
 public interface SystemUseCase {
     System findSystemById(Integer id);
