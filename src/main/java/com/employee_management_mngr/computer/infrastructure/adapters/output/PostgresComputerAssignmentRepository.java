@@ -8,11 +8,9 @@ import org.springframework.stereotype.Repository;
 import com.employee_management_mngr.computer.application.ports.output.ComputerAssignmentRepository;
 import com.employee_management_mngr.computer.domain.Computer;
 import com.employee_management_mngr.computer.domain.ComputerAssignment;
-import com.employee_management_mngr.computer.domain.ComputerAssignmentStatus;
 import com.employee_management_mngr.employee.domain.employee.Employee;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -61,49 +59,12 @@ public class PostgresComputerAssignmentRepository implements ComputerAssignmentR
     }
 
     @Override
-    public Optional<ComputerAssignment> findActiveAssignmentByComputer(Computer computer) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<ComputerAssignment> query = cb.createQuery(ComputerAssignment.class);
-        Root<ComputerAssignment> root = query.from(ComputerAssignment.class);
-
-        query.where(cb.and(cb.equal(root.get("computer"), computer),
-                cb.equal(root.get("status"), ComputerAssignmentStatus.APPROVED), cb.isNull(root.get("returnDate"))));
-
-        try {
-            return Optional.of(em.createQuery(query).setMaxResults(1).getSingleResult());
-        } catch (NoResultException e) {
-            return Optional.empty();
-        }
-    }
-
-    @Override
     public List<ComputerAssignment> findByAssignedBy(Integer assignedBy) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<ComputerAssignment> query = cb.createQuery(ComputerAssignment.class);
         Root<ComputerAssignment> root = query.from(ComputerAssignment.class);
 
         query.where(cb.equal(root.get("assignedBy"), assignedBy));
-
-        return em.createQuery(query).getResultList();
-    }
-
-    @Override
-    public List<ComputerAssignment> findByIdRange(Integer startId, Integer endId) {
-        return findByIdRangeAndAssignedBy(startId, endId, null);
-    }
-
-    public List<ComputerAssignment> findByIdRangeAndAssignedBy(Integer startId, Integer endId, Employee assignedBy) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<ComputerAssignment> query = cb.createQuery(ComputerAssignment.class);
-        Root<ComputerAssignment> root = query.from(ComputerAssignment.class);
-
-        if (assignedBy == null) {
-            query.where(cb.and(cb.greaterThanOrEqualTo(root.get("id"), startId),
-                    cb.lessThanOrEqualTo(root.get("id"), endId)));
-        } else {
-            query.where(cb.and(cb.greaterThanOrEqualTo(root.get("id"), startId),
-                    cb.lessThanOrEqualTo(root.get("id"), endId), cb.equal(root.get("assignedBy"), assignedBy)));
-        }
 
         return em.createQuery(query).getResultList();
     }

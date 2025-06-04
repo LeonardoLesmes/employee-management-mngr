@@ -2,7 +2,6 @@ package com.employee_management_mngr.computer.application.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +13,10 @@ import com.employee_management_mngr.computer.domain.Computer;
 import com.employee_management_mngr.computer.domain.ComputerAssignment;
 import com.employee_management_mngr.computer.domain.ComputerAssignmentStatus;
 import com.employee_management_mngr.computer.domain.ComputerStatus;
+import com.employee_management_mngr.employee.application.exceptions.EmployeeNotApprovedException;
 import com.employee_management_mngr.employee.application.ports.input.EmployeeUseCase;
 import com.employee_management_mngr.employee.domain.employee.Employee;
+import com.employee_management_mngr.employee.domain.employee.EmployeeStatus;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,6 +30,11 @@ public class ComputerAssignmentService {
 
     public ComputerAssignment createAssignment(Integer employeeId, Integer computerId, Integer assignedById) {
         Employee employee = employeeUseCase.findEmployeeById(employeeId);
+
+        if (employee.getStatus() != EmployeeStatus.APPROVED) {
+            throw new EmployeeNotApprovedException(employeeId.toString());
+        }
+
         Computer computer = computerRepository.findById(computerId)
                 .orElseThrow(() -> new ComputerAssignmentException("Computer not found with id: " + computerId));
 
@@ -36,12 +42,13 @@ public class ComputerAssignmentService {
             throw new ComputerAssignmentException("Computer is not available for assignment");
         }
 
+        computer.setStatus(ComputerStatus.IN_PROCESS);
+
         ComputerAssignment assignment = new ComputerAssignment();
         assignment.setEmployee(employee);
         assignment.setComputer(computer);
         assignment.setAssignedBy(assignedById);
         assignment.setStatus(ComputerAssignmentStatus.PENDING);
-        // No es necesario setear requestDate manualmente, se establece con @PrePersist
 
         return computerAssignmentRepository.save(assignment);
     }
@@ -53,12 +60,14 @@ public class ComputerAssignmentService {
         assignment.setStatus(status);
         assignment.setResolutionDate(LocalDateTime.now());
 
+        Computer computer = assignment.getComputer();
         if (status == ComputerAssignmentStatus.APPROVED) {
             assignment.setResolutionDate(LocalDateTime.now());
-            Computer computer = assignment.getComputer();
             computer.setStatus(ComputerStatus.ASSIGNED);
-            computerRepository.save(computer);
+        } else if (status == ComputerAssignmentStatus.REJECTED || status == ComputerAssignmentStatus.CANCELED) {
+            computer.setStatus(ComputerStatus.AVAILABLE);
         }
+        computerRepository.save(computer);
 
         return computerAssignmentRepository.save(assignment);
     }
@@ -75,34 +84,7 @@ public class ComputerAssignmentService {
         return computerAssignmentRepository.findByAssignedBy(assignedById);
     }
 
-    public List<ComputerAssignment> findActiveAssignments() {
-        return computerRepository.findAll().stream().filter(computer -> computer.getStatus() == ComputerStatus.ASSIGNED)
-                .map(computerAssignmentRepository::findActiveAssignmentByComputer).filter(Optional::isPresent)
-                .map(Optional::get).toList();
-    }
-
     public List<Computer> findAvailableComputers() {
         return computerRepository.findAvailableComputers();
-    }
-
-    public List<ComputerAssignment> findByIdRange(Integer startId, Integer endId) {
-        return findByIdRangeAndAssignedBy(startId, endId, null);
-    }
-
-    public List<ComputerAssignment> findByIdRangeAndAssignedBy(Integer startId, Integer endId, Integer assignedById) {
-        if (startId == null || endId == null) {
-            throw new ComputerAssignmentException("Start ID and End ID cannot be null");
-        }
-
-        if (startId > endId) {
-            throw new ComputerAssignmentException("Start ID cannot be greater than End ID");
-        }
-
-        if (assignedById == null) {
-            return computerAssignmentRepository.findByIdRange(startId, endId);
-        } else {
-            Employee assignedBy = employeeUseCase.findEmployeeById(assignedById);
-            return computerAssignmentRepository.findByIdRangeAndAssignedBy(startId, endId, assignedBy);
-        }
     }
 }

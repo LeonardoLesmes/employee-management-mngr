@@ -14,6 +14,7 @@ import com.employee_management_mngr.computer.domain.ComputerAssignmentStatus;
 import com.employee_management_mngr.computer.infrastructure.adapters.inputs.dto.ComputerAssignmentDTO;
 import com.employee_management_mngr.computer.infrastructure.adapters.inputs.dto.ComputerDTO;
 import com.employee_management_mngr.computer.infrastructure.adapters.inputs.dto.CreateComputerAssignmentDTO;
+import com.employee_management_mngr.employee.application.exceptions.EmployeeNotApprovedException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,13 +56,6 @@ public class ComputerAssignmentController {
         return ResponseEntity.ok(assignments);
     }
 
-    @GetMapping("/active")
-    public ResponseEntity<List<ComputerAssignmentDTO>> getActiveAssignments() {
-        List<ComputerAssignmentDTO> assignments = computerAssignmentUseCase.findActiveAssignments().stream()
-                .map(ComputerAssignmentDTO::fromEntity).toList();
-        return ResponseEntity.ok(assignments);
-    }
-
     @GetMapping("/available")
     public ResponseEntity<List<ComputerDTO>> getAvailableComputers() {
         List<Computer> computers = computerAssignmentUseCase.findAvailableComputers();
@@ -69,25 +63,13 @@ public class ComputerAssignmentController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/range")
-    public ResponseEntity<List<ComputerAssignmentDTO>> getAssignmentsByIdRange(@RequestParam Integer startId,
-            @RequestParam Integer endId, @RequestParam(required = false) Integer assignedById) {
-        List<ComputerAssignment> assignments;
-
-        if (assignedById == null) {
-            assignments = computerAssignmentUseCase.findByIdRange(startId, endId);
-        } else {
-            assignments = computerAssignmentUseCase.findByIdRangeAndAssignedBy(startId, endId, assignedById);
-        }
-
-        List<ComputerAssignmentDTO> assignmentDTOs = assignments.stream().map(ComputerAssignmentDTO::fromEntity)
-                .toList();
-
-        return ResponseEntity.ok(assignmentDTOs);
-    }
-
     @ExceptionHandler(ComputerAssignmentException.class)
     public ResponseEntity<String> handleComputerAssignmentException(ComputerAssignmentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+    @ExceptionHandler(EmployeeNotApprovedException.class)
+    public ResponseEntity<String> handleEmployeeNotApproved(EmployeeNotApprovedException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 }

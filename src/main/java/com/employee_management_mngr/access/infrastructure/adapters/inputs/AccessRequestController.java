@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.*;
 
 import com.employee_management_mngr.access.application.exceptions.AccessRequestCreationException;
 import com.employee_management_mngr.access.application.exceptions.AlreadyExistAccessRequest;
-import com.employee_management_mngr.access.application.exceptions.EmployeeNotApprovedException;
 import com.employee_management_mngr.access.application.exceptions.SystemNotFoundException;
 import com.employee_management_mngr.access.application.ports.input.AccessRequestUseCase;
 import com.employee_management_mngr.access.domain.AccessRequest;
 import com.employee_management_mngr.access.infrastructure.adapters.inputs.dto.AccessRequestDTO;
 import com.employee_management_mngr.access.infrastructure.adapters.inputs.dto.CreateAccessRequestDTO;
 import com.employee_management_mngr.access.infrastructure.adapters.inputs.dto.UpdateAccessRequestStatusDTO;
+import com.employee_management_mngr.employee.application.exceptions.EmployeeNotApprovedException;
 import com.employee_management_mngr.employee.application.exceptions.EmployeeNotFoundException;
 
 import lombok.RequiredArgsConstructor;
