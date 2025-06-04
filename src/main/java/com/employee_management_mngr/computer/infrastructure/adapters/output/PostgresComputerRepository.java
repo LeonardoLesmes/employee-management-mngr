@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.employee_management_mngr.computer.application.ports.output.ComputerRepository;
 import com.employee_management_mngr.computer.domain.Computer;
-import com.employee_management_mngr.computer.domain.ComputerStatus;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
