@@ -52,7 +52,7 @@ public class EmployeeController {
     public ResponseEntity<Employee> updateEmployeeStatus(@PathVariable Integer id,
             @RequestBody UpdateEmployeeStatusDto updateEmployeeStatusDto) {
         employeeUseCase.updateEmployeeStatus(id, EmployeeStatus.valueOf(updateEmployeeStatusDto.getStatus().name()));
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @ExceptionHandler(ErrorCreationEmployee.class)
