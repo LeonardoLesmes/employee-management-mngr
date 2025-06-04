@@ -39,3 +39,4 @@ src/main/java/com/employee_management_mngr/temp/
 employees
 database.sql
 access-relations.txt
+create-all-tables.sql
