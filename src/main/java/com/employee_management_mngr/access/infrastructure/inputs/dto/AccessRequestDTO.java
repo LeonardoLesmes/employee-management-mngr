@@ -31,7 +31,7 @@ public class AccessRequestDTO {
         dto.setStatus(entity.getStatus());
         dto.setRequestDate(entity.getRequestDate());
         dto.setResolutionDate(entity.getResolutionDate());
-        dto.setAssignedById(entity.getAssignedBy().getId());
+        dto.setAssignedById(entity.getAssignedBy());
         return dto;
     }
 }

@@ -28,7 +28,6 @@ public class AccessRequestService {
 
     public List<AccessRequest> createAccessRequests(Integer employeeId, List<Integer> systemIds, Integer assignedById) {
         Employee employee = employeeUseCase.findEmployeeById(employeeId);
-        Employee assignedBy = employeeUseCase.findEmployeeById(assignedById);
 
         return systemIds.stream().map(systemId -> {
             System system = systemUseCase.findSystemById(systemId);
@@ -48,7 +47,7 @@ public class AccessRequestService {
             accessRequest.setSystem(system);
             accessRequest.setStatus(AccessRequestStatus.PENDING);
             accessRequest.setRequestDate(LocalDateTime.now());
-            accessRequest.setAssignedBy(assignedBy);
+            accessRequest.setAssignedBy(assignedById);
 
             return accessRequestRepository.save(accessRequest);
         }).toList();
@@ -59,7 +58,7 @@ public class AccessRequestService {
         if (assignedById == null) {
             return requests;
         }
-        return requests.stream().filter(request -> request.getAssignedBy().getId().equals(assignedById)).toList();
+        return requests.stream().filter(request -> request.getAssignedBy().equals(assignedById)).toList();
     }
 
     public List<AccessRequest> findByEmployeeId(Integer employeeId) {

@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.employee_management_mngr.auth.application.dtos.AuthRequest;
 import com.employee_management_mngr.auth.application.dtos.AuthResponse;
+import com.employee_management_mngr.auth.application.dtos.CreateManagerPasswordRequest;
+import com.employee_management_mngr.auth.application.dtos.RegisterManagerRequest;
 import com.employee_management_mngr.auth.application.ports.input.AuthUseCase;
+import com.employee_management_mngr.auth.domain.Manager;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -22,13 +25,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-        AuthResponse response = authService.authenticate(request);
+        AuthResponse response = authService.authenticateManager(request);
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/create-password")
-    public ResponseEntity<Void> createPassword(@RequestBody AuthRequest request) {
-        authService.createPassword(request);
+    @PostMapping("/set-password")
+    public ResponseEntity<Void> createManagerPassword(@RequestBody CreateManagerPasswordRequest request) {
+        authService.createManagerPassword(request);
         return ResponseEntity.ok().build();
     }
 }

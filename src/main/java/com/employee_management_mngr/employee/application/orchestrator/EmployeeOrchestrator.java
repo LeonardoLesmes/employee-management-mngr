@@ -15,8 +15,6 @@ import com.employee_management_mngr.employee.domain.employee.Employee;
 import com.employee_management_mngr.employee.domain.employee.EmployeeStatus;
 import com.employee_management_mngr.employee.domain.role.Role;
 import com.employee_management_mngr.employee.infrastructure.adapters.inputs.dto.CreateEmployeeDto;
-import com.employee_management_mngr.auth.application.ports.output.AuthRepository;
-import com.employee_management_mngr.auth.domain.Credentials;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -28,7 +26,6 @@ import org.slf4j.LoggerFactory;
 public class EmployeeOrchestrator implements EmployeeUseCase {
     private final EmployeeService employeeService;
     private final ThirdPartyIntegrationService thirdPartyIntegrationService;
-    private final AuthRepository authRepository;
     private final com.employee_management_mngr.employee.application.services.RoleService roleService;
 
     private static final Logger logger = LoggerFactory.getLogger(EmployeeOrchestrator.class);
@@ -57,29 +54,18 @@ public class EmployeeOrchestrator implements EmployeeUseCase {
             employee.setAssignedBy(employeeDto.getAssignedBy());
         }
 
-        employee.setRoleAssignedAt(java.time.LocalDateTime.now());
-
         Employee savedEmployee = employeeService.createEmployee(employee);
         setupEmployeePostCreation(savedEmployee);
     }
 
     private void setupEmployeePostCreation(Employee employee) {
         try {
-            createEmployeeCredentials(employee);
             notifyThirdPartyServices(employee);
         } catch (Exception e) {
             logger.error("Error during post-creation setup for employee ID {}: {}", employee.getId(), e.getMessage(),
                     e);
             throw new ErrorPostCreationEmployee("Failed to complete setup for employee ID " + employee.getId(), e);
         }
-    }
-
-    private void createEmployeeCredentials(Employee employee) {
-        Credentials credentials = new Credentials();
-        credentials.setEmployee(employee);
-        credentials.setPasswordHash("");
-        credentials.setIsActive(true);
-        authRepository.save(credentials);
     }
 
     private void notifyThirdPartyServices(Employee employee) {

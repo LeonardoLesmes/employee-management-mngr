@@ -34,10 +34,7 @@ public class ComputerAssignmentDTO {
         dto.setStatus(entity.getStatus());
         dto.setRequestDate(entity.getRequestDate());
         dto.setResolutionDate(entity.getResolutionDate());
-        dto.setAssignmentDate(entity.getAssignmentDate());
-        dto.setReturnDate(entity.getReturnDate());
-        dto.setAssignedById(entity.getAssignedBy().getId());
-        dto.setAssignedByName(entity.getAssignedBy().getName());
+        dto.setAssignedById(entity.getAssignedBy());
         return dto;
     }
 }

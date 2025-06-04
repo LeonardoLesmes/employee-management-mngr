@@ -44,12 +44,15 @@ public class Employee {
     @Column(nullable = false)
     private EmployeeStatus status;
 
+    @Column(name = "request_date", nullable = true)
+    private LocalDateTime requestDate;
+
     @Column(name = "assigned_by", nullable = false)
     private Integer assignedBy;
 
-    @Column(name = "role_assigned_at", nullable = false)
-    private LocalDateTime roleAssignedAt;
+    @Column(name = "approved_by", nullable = true)
+    private Integer approvedBy;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "resolution_date", nullable = true)
+    private LocalDateTime resolutionDate;
 }

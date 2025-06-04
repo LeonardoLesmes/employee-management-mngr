@@ -1,51 +1,62 @@
 package com.employee_management_mngr.auth.application.orchestrators;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 
 import com.employee_management_mngr.auth.application.dtos.AuthRequest;
 import com.employee_management_mngr.auth.application.dtos.AuthResponse;
+import com.employee_management_mngr.auth.application.dtos.RegisterManagerRequest;
+import com.employee_management_mngr.auth.application.dtos.CreateManagerPasswordRequest;
 import com.employee_management_mngr.auth.application.exceptions.AuthenticationException;
 import com.employee_management_mngr.auth.application.ports.input.AuthUseCase;
+import com.employee_management_mngr.auth.application.ports.input.ManagerUseCase;
+import com.employee_management_mngr.auth.application.ports.output.ManagerRepository;
+import com.employee_management_mngr.auth.application.ports.output.ManagerRoleRepository;
 import com.employee_management_mngr.auth.application.services.CredentialsService;
 import com.employee_management_mngr.auth.application.services.JwtService;
-import com.employee_management_mngr.employee.application.ports.input.EmployeeUseCase;
-import com.employee_management_mngr.employee.domain.employee.Employee;
-import com.employee_management_mngr.employee.domain.role.Role;
+import com.employee_management_mngr.auth.domain.Manager;
+import com.employee_management_mngr.auth.domain.ManagerRole;
 
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 
 @Component
 @Transactional
+@AllArgsConstructor
 public class AuthOrchestrator implements AuthUseCase {
 
     private final CredentialsService credentialsService;
-    private final EmployeeUseCase employeeUseCase;
+    private final ManagerUseCase managerUseCase;
     private final JwtService jwtService;
 
-    public AuthOrchestrator(CredentialsService credentialsService, EmployeeUseCase employeeUseCase,
-            JwtService jwtService) {
-        this.credentialsService = credentialsService;
-        this.employeeUseCase = employeeUseCase;
-        this.jwtService = jwtService;
-    }
-
     @Override
-    public AuthResponse authenticate(AuthRequest request) {
-        Employee employee = this.employeeUseCase.findEmployeeByEmail(request.getEmail());
-        Role role = employee.getRole();
-        if (!employee.getRole().getType().isCanLogin()) {
-            throw new AuthenticationException("User with role " + role.getType().getName() + " cannot login.");
-        }
+    public AuthResponse authenticateManager(AuthRequest request) {
+        Manager manager = this.managerUseCase.findManagerByEmail(request.getEmail());
+        ManagerRole role = manager.getRole();
+        
         credentialsService.isValidCredentials(request.getEmail(), request.getPassword());
 
-        String token = jwtService.generateToken(employee.getId(), role.getType().getName());
+        String token = jwtService.generateToken(manager.getId(), role.getName());
 
-        return AuthResponse.builder().id(employee.getId()).name(employee.getName())
-                .role(employee.getRole().getType().getName()).token(token).build();
+        return AuthResponse.builder()
+                .id(manager.getId())
+                .name(manager.getName())
+                .role(manager.getRole().getName())
+                .token(token)
+                .build();
     }
 
     @Override
-    public void createPassword(AuthRequest request) {
-        credentialsService.createPassword(request);
+    public void createManagerPassword(CreateManagerPasswordRequest request) {        
+        Manager manager = this.managerUseCase.findManagerByEmail(request.getEmail());    
+        if (!Boolean.TRUE.equals(manager.getIsActive())) {
+            throw new AuthenticationException("El manager no está activo");
+        }
+        AuthRequest authRequest = new AuthRequest();
+        authRequest.setEmail(request.getEmail());
+        authRequest.setPassword(request.getPassword());
+        credentialsService.createPassword(authRequest);
     }
 }

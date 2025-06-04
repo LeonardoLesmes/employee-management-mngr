@@ -2,8 +2,6 @@ package com.employee_management_mngr.auth.domain;
 
 import java.time.LocalDateTime;
 
-import com.employee_management_mngr.employee.domain.employee.Employee;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,22 +17,25 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "employee_credentials")
-public class Credentials {
+@Table(name = "managers_credentials")
+public class ManagerCredentials {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+    @JoinColumn(name = "manager_id", nullable = false)
+    private Manager manager;
 
-    @Column(name = "password_hash")
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
-
-    @Column(name = "is_active")
-    private Boolean isActive;
+    
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

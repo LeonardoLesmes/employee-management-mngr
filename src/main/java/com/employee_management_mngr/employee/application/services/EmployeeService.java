@@ -29,7 +29,6 @@ public class EmployeeService {
     public Employee createEmployee(Employee employee) {
         try {
             validateRequiredFields(employee);
-            setDefaultValues(employee);
             return employeeRepository.save(employee);
         } catch (RequiredFieldMissingException e) {
             throw new InvalidEmployeeRequest(e.getMessage());
@@ -54,15 +53,6 @@ public class EmployeeService {
         }
         if (employee.getAssignedBy() == null) {
             throw new RequiredFieldMissingException("assignedBy");
-        }
-    }
-
-    private void setDefaultValues(Employee employee) {
-        if (employee.getCreatedAt() == null) {
-            employee.setCreatedAt(LocalDateTime.now());
-        }
-        if (employee.getRoleAssignedAt() == null) {
-            employee.setRoleAssignedAt(LocalDateTime.now());
         }
     }
 

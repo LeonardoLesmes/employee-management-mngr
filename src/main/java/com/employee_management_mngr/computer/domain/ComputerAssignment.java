@@ -27,19 +27,15 @@ public class ComputerAssignment {
     @Column(nullable = false)
     private ComputerAssignmentStatus status;
 
-    @Column(name = "request_date")
+    @Column(name = "request_date", nullable = true)
     private LocalDateTime requestDate;
 
-    @Column(name = "resolution_date")
+    @Column(name = "assigned_by", nullable = false)
+    private Integer assignedBy;
+
+    @Column(name = "approved_by", nullable = true)
+    private Integer approvedBy;
+
+    @Column(name = "resolution_date", nullable = true)
     private LocalDateTime resolutionDate;
-
-    @Column(name = "assignment_date")
-    private LocalDateTime assignmentDate;
-
-    @Column(name = "return_date")
-    private LocalDateTime returnDate;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assigned_by")
-    private Employee assignedBy;
 }

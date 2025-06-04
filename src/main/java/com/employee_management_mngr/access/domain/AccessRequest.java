@@ -28,13 +28,15 @@ public class AccessRequest {
     @Column(name = "status", nullable = false)
     private AccessRequestStatus status;
 
-    @Column(name = "request_date")
+    @Column(name = "request_date", nullable = true)
     private LocalDateTime requestDate;
 
-    @Column(name = "resolution_date")
-    private LocalDateTime resolutionDate;
+    @Column(name = "assigned_by", nullable = false)
+    private Integer assignedBy;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assigned_by", nullable = false)
-    private Employee assignedBy;
+    @Column(name = "approved_by", nullable = true)
+    private Integer approvedBy;
+
+    @Column(name = "resolution_date", nullable = true)
+    private LocalDateTime resolutionDate;
 }

@@ -31,8 +31,7 @@ public class WebConfig {
         http.cors(Customizer.withDefaults()).csrf(CsrfConfigurer::disable)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login", "/api/health", "/api/auth/create-password",
-                                "/api/employees/unsafe", "/api/auth/validate-token")
+                        .requestMatchers("/api/auth/login", "/api/health", "/api/auth/set-password", "/api/auth/validate-token")
                         .permitAll().anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults());
 

@@ -29,7 +29,6 @@ public class ComputerAssignmentService {
 
     public ComputerAssignment createAssignment(Integer employeeId, Integer computerId, Integer assignedById) {
         Employee employee = employeeUseCase.findEmployeeById(employeeId);
-        Employee assignedBy = employeeUseCase.findEmployeeById(assignedById);
         Computer computer = computerRepository.findById(computerId)
                 .orElseThrow(() -> new ComputerAssignmentException("Computer not found with id: " + computerId));
 
@@ -40,7 +39,7 @@ public class ComputerAssignmentService {
         ComputerAssignment assignment = new ComputerAssignment();
         assignment.setEmployee(employee);
         assignment.setComputer(computer);
-        assignment.setAssignedBy(assignedBy);
+        assignment.setAssignedBy(assignedById);
         assignment.setStatus(ComputerAssignmentStatus.PENDING);
         assignment.setRequestDate(LocalDateTime.now());
 
@@ -55,7 +54,7 @@ public class ComputerAssignmentService {
         assignment.setResolutionDate(LocalDateTime.now());
 
         if (status == ComputerAssignmentStatus.APPROVED) {
-            assignment.setAssignmentDate(LocalDateTime.now());
+            assignment.setResolutionDate(LocalDateTime.now());
             Computer computer = assignment.getComputer();
             computer.setStatus(ComputerStatus.ASSIGNED);
             computerRepository.save(computer);

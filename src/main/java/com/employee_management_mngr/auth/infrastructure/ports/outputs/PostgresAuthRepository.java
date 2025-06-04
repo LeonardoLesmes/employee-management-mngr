@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.employee_management_mngr.auth.application.ports.output.AuthRepository;
-import com.employee_management_mngr.auth.domain.Credentials;
-import com.employee_management_mngr.employee.domain.employee.Employee;
+import com.employee_management_mngr.auth.domain.Manager;
+import com.employee_management_mngr.auth.domain.ManagerCredentials;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -23,14 +23,14 @@ public class PostgresAuthRepository implements AuthRepository {
     }
 
     @Override
-    public Optional<Credentials> findByEmployeeEmail(String email) {
+    public Optional<ManagerCredentials> findByManagerEmail(String email) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Credentials> query = cb.createQuery(Credentials.class);
+        CriteriaQuery<ManagerCredentials> query = cb.createQuery(ManagerCredentials.class);
 
-        Root<Credentials> credentials = query.from(Credentials.class);
-        Join<Credentials, Employee> employee = credentials.join("employee");
+        Root<ManagerCredentials> credentials = query.from(ManagerCredentials.class);
+        Join<ManagerCredentials, Manager> manager = credentials.join("manager");
 
-        query.where(cb.equal(employee.get("email"), email));
+        query.where(cb.equal(manager.get("email"), email));
 
         try {
             return Optional.of(em.createQuery(query).getSingleResult());
@@ -40,7 +40,7 @@ public class PostgresAuthRepository implements AuthRepository {
     }
 
     @Override
-    public Optional<Credentials> save(Credentials credentials) {
+    public Optional<ManagerCredentials> save(ManagerCredentials credentials) {
         try {
             em.persist(credentials);
             return Optional.of(credentials);
