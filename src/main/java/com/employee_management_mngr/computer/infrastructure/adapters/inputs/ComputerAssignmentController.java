@@ -46,7 +46,7 @@ public class ComputerAssignmentController {
         if (assignments.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
-            return ResponseEntity.ok(assignments.getFirst());
+            return ResponseEntity.ok(assignments.getLast());
         }
     }
 
