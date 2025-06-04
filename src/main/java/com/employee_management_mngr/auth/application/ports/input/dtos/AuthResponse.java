@@ -1,4 +1,4 @@
-package com.employee_management_mngr.auth.application.dtos;
+package com.employee_management_mngr.auth.application.ports.input.dtos;
 
 import lombok.Builder;
 import lombok.Getter;

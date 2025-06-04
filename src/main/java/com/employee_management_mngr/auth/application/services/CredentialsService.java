@@ -5,27 +5,23 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.employee_management_mngr.auth.application.dtos.AuthRequest;
 import com.employee_management_mngr.auth.application.exceptions.AuthenticationException;
 import com.employee_management_mngr.auth.application.ports.input.ManagerUseCase;
+import com.employee_management_mngr.auth.application.ports.input.dtos.AuthRequest;
 import com.employee_management_mngr.auth.application.ports.output.AuthRepository;
 import com.employee_management_mngr.auth.domain.Manager;
 import com.employee_management_mngr.auth.domain.ManagerCredentials;
 
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class CredentialsService {
     private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
     private final ManagerUseCase managerUseCase;
-
-    public CredentialsService(AuthRepository authRepository, PasswordEncoder passwordEncoder, ManagerUseCase managerUseCase) {
-        this.authRepository = authRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.managerUseCase = managerUseCase;
-    }
 
     public void isValidCredentials(String email, String password) {
         ManagerCredentials credentials = this.findByEmail(email);
@@ -41,7 +37,6 @@ public class CredentialsService {
     }
 
     public void createPassword(AuthRequest request) {
-        // Buscar credenciales existentes
         Optional<ManagerCredentials> existingCredentials = authRepository.findByManagerEmail(request.getEmail());
         
         ManagerCredentials credentials;
@@ -56,11 +51,9 @@ public class CredentialsService {
             
             credentials = new ManagerCredentials();
             credentials.setManager(manager);
-            // No es necesario setear createdAt manualmente, se establece con @PrePersist
         }
         String passwordHash = passwordEncoder.encode(request.getPassword());
         credentials.setPasswordHash(passwordHash);
-        // No es necesario setear updatedAt manualmente, se establece con @PreUpdate
         authRepository.save(credentials);
     }
 

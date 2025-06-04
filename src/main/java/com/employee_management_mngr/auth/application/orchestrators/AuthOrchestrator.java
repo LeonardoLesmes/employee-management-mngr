@@ -1,19 +1,13 @@
 package com.employee_management_mngr.auth.application.orchestrators;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
 import org.springframework.stereotype.Component;
 
-import com.employee_management_mngr.auth.application.dtos.AuthRequest;
-import com.employee_management_mngr.auth.application.dtos.AuthResponse;
-import com.employee_management_mngr.auth.application.dtos.RegisterManagerRequest;
-import com.employee_management_mngr.auth.application.dtos.CreateManagerPasswordRequest;
 import com.employee_management_mngr.auth.application.exceptions.AuthenticationException;
 import com.employee_management_mngr.auth.application.ports.input.AuthUseCase;
 import com.employee_management_mngr.auth.application.ports.input.ManagerUseCase;
-import com.employee_management_mngr.auth.application.ports.output.ManagerRepository;
-import com.employee_management_mngr.auth.application.ports.output.ManagerRoleRepository;
+import com.employee_management_mngr.auth.application.ports.input.dtos.AuthRequest;
+import com.employee_management_mngr.auth.application.ports.input.dtos.AuthResponse;
+import com.employee_management_mngr.auth.application.ports.input.dtos.CreateManagerPasswordRequest;
 import com.employee_management_mngr.auth.application.services.CredentialsService;
 import com.employee_management_mngr.auth.application.services.JwtService;
 import com.employee_management_mngr.auth.domain.Manager;

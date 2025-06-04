@@ -1,4 +1,4 @@
-package com.employee_management_mngr.auth.infrastructure.inputs;
+package com.employee_management_mngr.auth.infrastructure.ports.inputs;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.employee_management_mngr.auth.application.dtos.TokenValidationRequest;
 import com.employee_management_mngr.auth.application.ports.input.TokenValidationUseCase;
+import com.employee_management_mngr.auth.application.ports.input.dtos.TokenValidationRequest;
 
 import lombok.RequiredArgsConstructor;
 

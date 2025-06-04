@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.employee_management_mngr.auth.application.dtos.AuthRequest;
-import com.employee_management_mngr.auth.application.dtos.AuthResponse;
-import com.employee_management_mngr.auth.application.dtos.CreateManagerPasswordRequest;
 import com.employee_management_mngr.auth.application.ports.input.AuthUseCase;
+import com.employee_management_mngr.auth.application.ports.input.dtos.AuthRequest;
+import com.employee_management_mngr.auth.application.ports.input.dtos.AuthResponse;
+import com.employee_management_mngr.auth.application.ports.input.dtos.CreateManagerPasswordRequest;
 
 @RestController
 @RequestMapping("/api/auth")

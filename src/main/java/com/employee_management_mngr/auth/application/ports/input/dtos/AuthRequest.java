@@ -1,11 +1,11 @@
-package com.employee_management_mngr.auth.application.dtos;
+package com.employee_management_mngr.auth.application.ports.input.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateManagerPasswordRequest {
+public class AuthRequest {
     private String email;
     private String password;
 }
