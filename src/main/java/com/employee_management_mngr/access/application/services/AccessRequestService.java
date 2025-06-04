@@ -71,8 +71,6 @@ public class AccessRequestService {
         if (assignedById == null) {
             throw new AccessRequestCreationException("AssignedBy ID cannot be null");
         }
-
-        // Verificamos que el empleado existe
         employeeUseCase.findEmployeeById(assignedById);
 
         return accessRequestRepository.findByAssignedById(assignedById);

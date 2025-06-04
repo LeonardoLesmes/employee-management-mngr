@@ -21,7 +21,6 @@ public class TokenValidationOrchestrator implements TokenValidationUseCase {
             return false;
         }
 
-        // Remove "Bearer " prefix if present
         if (token.startsWith("Bearer ")) {
             token = token.substring(7);
         }
