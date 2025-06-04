@@ -1,5 +1,6 @@
 package com.employee_management_mngr.access.domain;
 
+import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,4 +21,12 @@ public class System {
 
     @Column(nullable = false)
     private Boolean active;
+    
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 }

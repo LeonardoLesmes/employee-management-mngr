@@ -1,6 +1,5 @@
 package com.employee_management_mngr.auth.application.services;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -57,11 +56,11 @@ public class CredentialsService {
             
             credentials = new ManagerCredentials();
             credentials.setManager(manager);
-            credentials.setCreatedAt(LocalDateTime.now());
+            // No es necesario setear createdAt manualmente, se establece con @PrePersist
         }
         String passwordHash = passwordEncoder.encode(request.getPassword());
         credentials.setPasswordHash(passwordHash);
-        credentials.setUpdatedAt(LocalDateTime.now());
+        // No es necesario setear updatedAt manualmente, se establece con @PreUpdate
         authRepository.save(credentials);
     }
 

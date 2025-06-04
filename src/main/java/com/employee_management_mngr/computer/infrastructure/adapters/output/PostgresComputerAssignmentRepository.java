@@ -77,7 +77,7 @@ public class PostgresComputerAssignmentRepository implements ComputerAssignmentR
     }
 
     @Override
-    public List<ComputerAssignment> findByAssignedBy(Employee assignedBy) {
+    public List<ComputerAssignment> findByAssignedBy(Integer assignedBy) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<ComputerAssignment> query = cb.createQuery(ComputerAssignment.class);
         Root<ComputerAssignment> root = query.from(ComputerAssignment.class);

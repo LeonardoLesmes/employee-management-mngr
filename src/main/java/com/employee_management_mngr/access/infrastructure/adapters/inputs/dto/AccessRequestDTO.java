@@ -1,4 +1,4 @@
-package com.employee_management_mngr.access.infrastructure.inputs.dto;
+package com.employee_management_mngr.access.infrastructure.adapters.inputs.dto;
 
 import java.time.LocalDateTime;
 

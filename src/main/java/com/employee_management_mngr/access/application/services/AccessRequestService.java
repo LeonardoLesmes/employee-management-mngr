@@ -42,11 +42,10 @@ public class AccessRequestService {
                 }
             }
 
-            AccessRequest accessRequest = new AccessRequest();
-            accessRequest.setEmployee(employee);
+            AccessRequest accessRequest = new AccessRequest();            accessRequest.setEmployee(employee);
             accessRequest.setSystem(system);
             accessRequest.setStatus(AccessRequestStatus.PENDING);
-            accessRequest.setRequestDate(LocalDateTime.now());
+            // No es necesario setear requestDate manualmente, se establece con @PrePersist
             accessRequest.setAssignedBy(assignedById);
 
             return accessRequestRepository.save(accessRequest);
@@ -70,8 +69,6 @@ public class AccessRequestService {
         if (assignedById == null) {
             throw new AccessRequestCreationException("AssignedBy ID cannot be null");
         }
-        employeeUseCase.findEmployeeById(assignedById);
-
         return accessRequestRepository.findByAssignedById(assignedById);
     }
 

@@ -28,7 +28,7 @@ public class AccessRequest {
     @Column(name = "status", nullable = false)
     private AccessRequestStatus status;
 
-    @Column(name = "request_date", nullable = true)
+    @Column(name = "request_date", nullable = true, updatable = false)
     private LocalDateTime requestDate;
 
     @Column(name = "assigned_by", nullable = false)
@@ -39,4 +39,9 @@ public class AccessRequest {
 
     @Column(name = "resolution_date", nullable = true)
     private LocalDateTime resolutionDate;
+
+    @PrePersist
+    protected void onCreate() {
+        requestDate = LocalDateTime.now();
+    }
 }

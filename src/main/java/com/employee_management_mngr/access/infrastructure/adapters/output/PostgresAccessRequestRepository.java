@@ -67,7 +67,7 @@ public class PostgresAccessRequestRepository implements AccessRequestRepository 
         CriteriaQuery<AccessRequest> query = cb.createQuery(AccessRequest.class);
         Root<AccessRequest> root = query.from(AccessRequest.class);
 
-        query.where(cb.equal(root.get("assignedBy").get("id"), assignedById));
+        query.where(cb.equal(root.get("assignedBy"), assignedById));
 
         return em.createQuery(query).getResultList();
     }

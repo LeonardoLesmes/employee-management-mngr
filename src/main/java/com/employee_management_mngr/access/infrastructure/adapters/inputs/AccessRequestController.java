@@ -1,4 +1,4 @@
-package com.employee_management_mngr.access.infrastructure.inputs;
+package com.employee_management_mngr.access.infrastructure.adapters.inputs;
 
 import java.util.List;
 
@@ -10,9 +10,9 @@ import com.employee_management_mngr.access.application.exceptions.AccessRequestC
 import com.employee_management_mngr.access.application.exceptions.SystemNotFoundException;
 import com.employee_management_mngr.access.application.ports.input.AccessRequestUseCase;
 import com.employee_management_mngr.access.domain.AccessRequest;
-import com.employee_management_mngr.access.infrastructure.inputs.dto.AccessRequestDTO;
-import com.employee_management_mngr.access.infrastructure.inputs.dto.CreateAccessRequestDTO;
-import com.employee_management_mngr.access.infrastructure.inputs.dto.UpdateAccessRequestStatusDTO;
+import com.employee_management_mngr.access.infrastructure.adapters.inputs.dto.AccessRequestDTO;
+import com.employee_management_mngr.access.infrastructure.adapters.inputs.dto.CreateAccessRequestDTO;
+import com.employee_management_mngr.access.infrastructure.adapters.inputs.dto.UpdateAccessRequestStatusDTO;
 import com.employee_management_mngr.employee.application.exceptions.EmployeeNotFoundException;
 
 import lombok.RequiredArgsConstructor;

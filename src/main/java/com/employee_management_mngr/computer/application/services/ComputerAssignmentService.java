@@ -41,7 +41,7 @@ public class ComputerAssignmentService {
         assignment.setComputer(computer);
         assignment.setAssignedBy(assignedById);
         assignment.setStatus(ComputerAssignmentStatus.PENDING);
-        assignment.setRequestDate(LocalDateTime.now());
+        // No es necesario setear requestDate manualmente, se establece con @PrePersist
 
         return computerAssignmentRepository.save(assignment);
     }
@@ -72,8 +72,7 @@ public class ComputerAssignmentService {
         if (assignedById == null) {
             throw new ComputerAssignmentException("AssignedBy ID cannot be null");
         }
-        Employee assignedBy = employeeUseCase.findEmployeeById(assignedById);
-        return computerAssignmentRepository.findByAssignedBy(assignedBy);
+        return computerAssignmentRepository.findByAssignedBy(assignedById);
     }
 
     public List<ComputerAssignment> findActiveAssignments() {

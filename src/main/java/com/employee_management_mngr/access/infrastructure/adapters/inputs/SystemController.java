@@ -1,4 +1,4 @@
-package com.employee_management_mngr.access.infrastructure.inputs;
+package com.employee_management_mngr.access.infrastructure.adapters.inputs;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.employee_management_mngr.access.application.ports.input.SystemUseCase;
-import com.employee_management_mngr.access.infrastructure.inputs.dto.SystemDTO;
+import com.employee_management_mngr.access.infrastructure.adapters.inputs.dto.SystemDTO;
 
 import lombok.RequiredArgsConstructor;
 

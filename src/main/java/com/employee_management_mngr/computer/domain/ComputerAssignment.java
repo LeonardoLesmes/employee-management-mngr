@@ -27,7 +27,7 @@ public class ComputerAssignment {
     @Column(nullable = false)
     private ComputerAssignmentStatus status;
 
-    @Column(name = "request_date", nullable = true)
+    @Column(name = "request_date", nullable = true, updatable = false)
     private LocalDateTime requestDate;
 
     @Column(name = "assigned_by", nullable = false)
@@ -38,4 +38,9 @@ public class ComputerAssignment {
 
     @Column(name = "resolution_date", nullable = true)
     private LocalDateTime resolutionDate;
+
+    @PrePersist
+    protected void onCreate() {
+        requestDate = LocalDateTime.now();
+    }
 }

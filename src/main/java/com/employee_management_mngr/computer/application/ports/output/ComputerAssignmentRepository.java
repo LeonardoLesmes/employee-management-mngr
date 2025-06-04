@@ -15,7 +15,7 @@ public interface ComputerAssignmentRepository {
 
     List<ComputerAssignment> findByComputer(Computer computer);
 
-    List<ComputerAssignment> findByAssignedBy(Employee assignedBy);
+    List<ComputerAssignment> findByAssignedBy(Integer assignedBy);
 
     List<ComputerAssignment> findByIdRange(Integer startId, Integer endId);
 

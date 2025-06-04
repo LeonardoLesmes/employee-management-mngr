@@ -1,4 +1,4 @@
-package com.employee_management_mngr.computer.infrastructure.inputs.dto;
+package com.employee_management_mngr.computer.infrastructure.adapters.inputs.dto;
 
 import com.employee_management_mngr.computer.domain.Computer;
 import com.employee_management_mngr.computer.domain.ComputerStatus;

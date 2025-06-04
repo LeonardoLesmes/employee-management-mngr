@@ -1,4 +1,4 @@
-package com.employee_management_mngr.computer.infrastructure.inputs;
+package com.employee_management_mngr.computer.infrastructure.adapters.inputs;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import com.employee_management_mngr.computer.application.ports.input.ComputerAss
 import com.employee_management_mngr.computer.domain.Computer;
 import com.employee_management_mngr.computer.domain.ComputerAssignment;
 import com.employee_management_mngr.computer.domain.ComputerAssignmentStatus;
-import com.employee_management_mngr.computer.infrastructure.inputs.dto.ComputerAssignmentDTO;
-import com.employee_management_mngr.computer.infrastructure.inputs.dto.ComputerDTO;
-import com.employee_management_mngr.computer.infrastructure.inputs.dto.CreateComputerAssignmentDTO;
+import com.employee_management_mngr.computer.infrastructure.adapters.inputs.dto.ComputerAssignmentDTO;
+import com.employee_management_mngr.computer.infrastructure.adapters.inputs.dto.ComputerDTO;
+import com.employee_management_mngr.computer.infrastructure.adapters.inputs.dto.CreateComputerAssignmentDTO;
 
 import lombok.RequiredArgsConstructor;
 

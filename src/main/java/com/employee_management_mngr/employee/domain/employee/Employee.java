@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,7 +45,7 @@ public class Employee {
     @Column(nullable = false)
     private EmployeeStatus status;
 
-    @Column(name = "request_date", nullable = true)
+    @Column(name = "request_date", nullable = true, updatable = false)
     private LocalDateTime requestDate;
 
     @Column(name = "assigned_by", nullable = false)
@@ -55,4 +56,9 @@ public class Employee {
 
     @Column(name = "resolution_date", nullable = true)
     private LocalDateTime resolutionDate;
+    
+    @PrePersist
+    protected void onCreate() {
+        requestDate = LocalDateTime.now();
+    }
 }
